@@ -48,7 +48,7 @@ var areaStyle = {
   "color": "red",
   "fillColor": "red",
   "opacity": 1,
-  "weight" : 0.4
+  "weight" : 0.4  
 }
 var segmentArea = new L.GeoJSON.AJAX(urlData,{onEachFeature:popUp, style: areaStyle});
 // segmentArea.addTo(map)

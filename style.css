@@ -6,6 +6,7 @@
 
 :root {
   --transition: 300ms all;
+  --vis-trans : visibility 0s, opacity 0.5s linear;     
   --shadow: 0px 2px 10px rgba(0, 0, 0, .6);
   --dark-color : rgba(0, 0, 0, .5)
 }
@@ -64,7 +65,6 @@ h1 {
 .start {
   z-index: 9997;
   margin: 5.5rem 0.7rem  ;
-  width: 50%;
   display: flex;
   justify-self: end;
 }
@@ -79,9 +79,31 @@ h1 {
   padding: 1.5rem;
   margin-right: 0.5rem;
   box-shadow: var(--shadow);
+  transition: var(--transition);
+  visibility: hidden;
+}
+
+.start__btn {
+  display: flex;
+  flex-direction: column;
+}
+
+.side-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .route__explore {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 5px;
+  background-color: white;
+  border-color: var(--dark-color);
+}
+
+.route__info {
+  margin-top: 2rem;
   height: 3rem;
   width: 3rem;
   border-radius: 5px;
@@ -106,13 +128,4 @@ h1 {
 .ship__container img {
   width: 7rem;
   height: 1rem;
-}
-
-
-canvas {
-  background: #f8f8f8;
-  padding: 0;
-  margin: 0 auto;
-  margin-bottom: 1rem;
-  display: block;
 }
