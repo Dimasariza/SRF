@@ -1,13 +1,9 @@
   // Define class DOM
 var startBar = document.getElementsByClassName('start__bar');
-
 // Adding click event on route explore
 var routeExp = document.getElementsByClassName('route__explore')
 var expFun = function(){
-  var startBarFun = function() {
-  }
   for (let i = 0; i < startBar.length ; i++){
-    // startBar[i].addEventListener("click", startBarFun, false)
     startBar[i].style.visibility = "visible";
   }
 };
@@ -19,6 +15,8 @@ for (let i = 0; i < routeExp.length; i++) {
 var routeInfo = document.getElementsByClassName('route__info')
 var infoFun = function() {
   // Adding event here
+  getDataPelabuhan() 
+
 }
 for (let i = 0; i < routeInfo.length; i++) {
   routeInfo[i].addEventListener("click", infoFun, false)
@@ -26,8 +24,13 @@ for (let i = 0; i < routeInfo.length; i++) {
 
   // Adding click event on fullscreen button
 var fullScr = document.getElementsByClassName('fullscreen')
+let miniMapContainer = document.getElementsByClassName('mini__map');
 var fullScrFun = function() {
-  console.log("clicked")
+  for (let i = 0; i < miniMapContainer.length ; i++){
+    miniMapContainer[i].style.height = "100vh";
+    miniMapContainer[i].style.width = "100vw";
+    miniMapContainer[i].style.margin = "0";
+  }
 }
 for (let i = 0; i<fullScr.length ; i++) {
   fullScr[i].addEventListener("click", fullScrFun, false)

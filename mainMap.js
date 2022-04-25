@@ -1,7 +1,3 @@
-  // define map container
-// var mapContainer = document.getElementById("map");
-
-
   // adding an OSM map
 var map = L.map('map', {
   zoomControl:false}).setView([1.5,122 ], 5);
@@ -27,7 +23,6 @@ googleSat.addTo(map);
 
   // read Data using ajax
 var urlData = [];
- 
 for ( var i = 11; i <= 44; i++) {
   urlDataLoop = `./data/provinsi/${i}.geojson`;
   urlData.push(urlDataLoop)
@@ -62,7 +57,6 @@ var baseLayers = {
 
 var control = L.control.layers(baseLayers).addTo(map);
 
-
   // Adding coordinates during mouse move
 map.on('mousemove', function(event){
   let lat = event.latlng.lat,
@@ -75,29 +69,39 @@ map.on('mousemove', function(event){
   }
 });
 
-// Making ship icon
+// Adding ship icon
 const shipIcon = L.icon({
-  iconUrl: "/SRF/src/img/Toba dreams.png",
-  iconSize : [50,12],
+  iconUrl: "./src/img/shipIcon.svg",
+  iconSize : [80,40],
   iconAnchor : [25, 16],
 });
-let shipMarker = L.marker([1.5,122], {icon: shipIcon}).addTo(map)
+let shipMarker = L.marker([-7.202638784078749, 112.7179207686899], {icon: shipIcon , rotationAngle: 45}).addTo(map)
 
+// Info pelabuhan
+const anchorIcon = L.icon({
+  iconUrl: "./src/img/anchor point.png",
+  iconSize : [30,30],
+})
 
-  // Adding layer style
-function initLayer(item, map) {
-  const stateLayer = L.geoJSON(item, {
-    style: function(feature) {
-       return {
-        weight: 8,
-        opacity: 1,
-        color: '#333',
-        fillOpacity: 1,
-        className: 'gradient-class' // add custom class
-      }
-    },
-  });
-  map.addLayer(stateLayer);
-} 
+  // Get data pelabuhan
+async function getDataPelabuhan () {
+  const urlDataPelabuhan = "./data/pelabuhan/dataPelabuhan.json"
+  const response = await fetch(urlDataPelabuhan);
+  const data = await response.json()
+  
+  for (let i=0 ; i < 18 ; i++){
+    let getData = data[i]
+    let namaPelabuhan = getData.Pelabuhan
+    let getLatLan = getData.LatLng
+
+    var marker12 = L.marker(getLatLan, {
+      icon: anchorIcon,
+      elevation: 260.0,
+      title: "Pelabuhan Peti Kemas Indonesia"
+    }).addTo(map);
+    marker12.bindPopup(`Nama Pelabuhan : ${namaPelabuhan}`)
+  }
+}
+
 
 

@@ -1,0 +1,92 @@
+[
+    {
+     "ID": "1.A",
+     "Pelabuhan": "TPK Belawan",
+     "LatLng": [3.7905202,98.7122946]
+    },
+    {
+     "ID": "1.B",
+     "Pelabuhan": "TPK Perawang",
+     "LatLng": [-7.210314,112.7259693]
+    },
+    {
+     "ID": "1.C",
+     "Pelabuhan": "TPK Semarang",
+     "LatLng": [-6.9451604,110.4241382]
+    },
+    {
+     "ID": "1.D",
+     "Pelabuhan": "TPK Nilam(Surabaya)",
+     "LatLng": [-7.2174818,112.7192625]
+    },
+    {
+     "ID": "1.E",
+     "Pelabuhan": "TPK Banjarmasin",
+     "LatLng": [-3.3313345,114.5561205]
+    },
+    {
+     "ID": "1.F",
+     "Pelabuhan": "TPK Pantoloan",
+     "LatLng": [-0.7109631,119.8571299]
+    },
+    {
+     "ID": "1.G",
+     "Pelabuhan": "TPK Bitung",
+     "LatLng": [1.443194,125.1957874]
+    },
+    {
+     "ID": "1.H",
+     "Pelabuhan": "Makassar New Port",
+     "LatLng": [-5.1094516,119.4375982]
+    },
+    {
+     "ID": "1.I",
+     "Pelabuhan": "TPK Makassar",
+     "LatLng": [-5.1297598,119.4029038]
+    },
+    {
+     "ID": "1.J",
+     "Pelabuhan": "TPK Kupang",
+     "LatLng": [-10.1935263,123.5254943]
+    },
+    {
+     "ID": "1.K",
+     "Pelabuhan": "TPK Ambon",
+     "LatLng": [-3.69347868247126,128.176604411401]
+    },
+    {
+     "ID": "1.L",
+     "Pelabuhan": "TPK Sorong",
+     "LatLng": [-7.2174818,112.7192625]
+    },
+    {
+     "ID": "2.A",
+     "Pelabuhan": "PT Terminal Peti Kemas Surabaya",
+     "LatLng": [-7.2174818,112.7192625]
+    },
+    {
+     "ID": "2.B",
+     "Pelabuhan": "PT Berlin Jasa Terminal Indonesia",
+     "LatLng": [-7.2085394,112.7316333]
+    },
+    {
+     "ID": "2.C",
+     "Pelabuhan": "PT IPC Terminal Peti Kemas",
+     "LatLng": [-6.1072822,106.8868656]
+    },
+    {
+     "ID": "2.D",
+     "Pelabuhan": "PT Terminal Teluk Lamong",
+     "LatLng": [-7.2045,112.6658132]
+    },
+    {
+     "ID": "2.E",
+     "Pelabuhan": "PT Kaltim Kariangau",
+     "LatLng": [-1.1583862,116.7841821]
+    },
+    {
+     "ID": "2.F",
+     "Pelabuhan": "PT Prima Terminal Petikemas",
+     "LatLng": [3.7800937,98.6839255]
+    }
+   ]

@@ -1,0 +1,27 @@
+//Anak perusahan Terminal Peti kemas
+"Data Anak Perusahaan" : {
+"harbor" : "PT Terminal Peti Kemas Surabaya",
+"id" : 1,
+"lat" : -7.2174818,
+"lng" : 112.7192625
+},
+// {
+// "harbor" : "PT Berlin Jasa Terminal Indonesia",
+// "latlan" : [-7.2085394,112.7316333,17],
+// },
+// {
+// "harbor" : "PT IPC Terminal Peti Kemas",
+// "latlan" : [-6.1072822,106.8868656],
+// },
+// {
+// "harbor" : "PT Terminal Teluk Lamong",
+// "latlan" : [-7.2060991,112.660341],
+// },
+// {
+// "harbor" : "PT Kaltim Kariangau",
+// "latlan" : [-1.1552996,116.7851042],
+// },
+// {
+// "harbor" : "PT Prima Terminal Petikemas",
+// "latlan" : [3.7808835,98.6857627],
+// }
