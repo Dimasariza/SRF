@@ -40,8 +40,8 @@ function popUp(f,l){
 
   // Adding segment area style
 var areaStyle = {
-  "color": "red",
-  "fillColor": "red",
+  "color": "rgba(255, 0, 0, .01)",
+  "fillColor": "rgba(255, 0, 0, 1)",
   "opacity": 1,
   "weight" : 0.4  
 }
@@ -102,6 +102,3 @@ async function getDataPelabuhan () {
     marker12.bindPopup(`Nama Pelabuhan : ${namaPelabuhan}`)
   }
 }
-
-
-

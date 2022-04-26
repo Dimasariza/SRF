@@ -12,14 +12,22 @@ for (let i = 0; i < routeExp.length; i++) {
 }
 
   // Adding click event on route Info
-var routeInfo = document.getElementsByClassName('route__info')
-var infoFun = function() {
-  // Adding event here
-  getDataPelabuhan() 
-
+var harborInfo = document.getElementsByClassName('harbor__info')
+var infoFun = () => {
+  if (
+    harborInfo[0].classList.contains("active") === false
+    ) {
+      harborInfo[0].classList.add("active")
+      harborInfo[0].children[0].textContent = "close"
+      getDataPelabuhan() 
+    } else {
+      harborInfo[0].classList.remove("active")
+      harborInfo[0].children[0].textContent = "anchor"
+  }
+  
 }
-for (let i = 0; i < routeInfo.length; i++) {
-  routeInfo[i].addEventListener("click", infoFun, false)
+for (let i = 0; i < harborInfo.length; i++) {
+  harborInfo[i].addEventListener("click", infoFun, false)
 }
 
   // Adding click event on fullscreen button
