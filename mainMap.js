@@ -1,6 +1,6 @@
   // Adding an OSM map
 const map = L.map('map', {
-      zoomControl:false}).setView([2.8,115 ], 5);
+      zoomControl:false}).setView([2.8,113 ], 5);
       map.attributionControl.setPrefix(false)  
       map.options.minZoom = 5;
       map.options.maxZoom = 18;
@@ -11,8 +11,8 @@ const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const tilesMap = L.tileLayer(tileUrl, {attr});
 
 const googleSat = L.tileLayer("http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",{
-      maxZoom:18,
       minZoom: 5,
+      maxZoom:18,
       subdomains:['mt0','mt1','mt2','mt3']
 });
 googleSat.addTo(map);
@@ -71,8 +71,16 @@ const anchorIcon = L.icon({
 })
 
   // Get port data =======================================================================================
-let portIdx = []
+let portIdx = new Array
+this.anchorOrg1
+this.anchorDest1;
+this.anchorOrg2;
+this.anchorDest2;
 let findButton = gEl('findBtn', 0) 
+let anchorOrg_1 = gEl('anchor_org1')
+let anchorOrg_2 = gEl('anchor_org2')
+let anchorDest_1 = gEl('anchor_dest1')
+let anchorDest_2 = gEl('anchor_dest2')
 async function getPortData (i) {
   const urlPortData = "./src/data/pelabuhan/dataPelabuhan.json"
   const response = await fetch(urlPortData);
@@ -84,7 +92,6 @@ async function getPortData (i) {
         addChd('liPortOrg', `${data[item].Pelabuhan}`, "o" , `${[item]}`)
       }
       if ( i === 'show') {
-        this["anchorMarker" + item ]
         this["anchorMarker" + item ] = L.marker(data[item].LatLng, {icon:  anchorIcon}).addTo(map)
         this["anchorMarker" + item ].bindPopup(`Nama Pelabuhan : ${data[item].Pelabuhan} <br>
         Id Pelabuhan : ${data[item].ID}`)
@@ -118,9 +125,30 @@ async function getPortData (i) {
         findButton.setAttribute('onclick', `wayPoint( ${orgX} , ${orgY}, ${destX}, ${destY})`)
         console.log(portIdx)
       }
-      this.anchorMarker = L.marker(data[i].LatLng, {icon:  anchorIcon}).addTo(map)
-      L.DomUtil.addClass(this["anchorMarker"]._icon, 'anchor_active');
 
+    if ( anchorOrg_1.length == 0 ) {
+      anchorOrg1 = L.marker(data[portIdx[0]].LatLng, {icon:  anchorIcon}).addTo(map)
+      L.DomUtil.addClass(this["anchorOrg" + 1]._icon, 'anchor_org1');
+      if ( anchorOrg_2.length !== 0) {
+        map.removeLayer(anchorOrg2)
+      }
+    } else if ( anchorOrg_1.length != 0) {
+      map.removeLayer(anchorOrg1)
+      anchorOrg2 = L.marker(data[portIdx[0]].LatLng, {icon:  anchorIcon}).addTo(map)
+      L.DomUtil.addClass(this["anchorOrg" + 2]._icon, 'anchor_org2');
+    }
+
+    if ( anchorDest_1.length == 0 && portIdx.length > 1 ) {
+      anchorDest1 = L.marker(data[portIdx[1]].LatLng, {icon:  anchorIcon}).addTo(map)
+      L.DomUtil.addClass(this["anchorDest" + 1]._icon, 'anchor_dest1');
+      if ( anchorDest_2.length != 0) {
+        map.removeLayer(anchorDest2)
+      }
+    } else if (anchorDest_1.length !=0 ) {
+      map.removeLayer(anchorDest1)
+      anchorDest2 = L.marker(data[portIdx[1]].LatLng, {icon:  anchorIcon}).addTo(map)
+      L.DomUtil.addClass(this["anchorDest" + 2]._icon, 'anchor_dest2');
+    }
   }
 }
 getPortData("Load")
@@ -140,9 +168,6 @@ function  passOrg(i) {
       if (findConds === false || portIdx.length > 0) {
         currOrgList.parentElement.setAttribute('onclick', `passOrg(${x})`)
         currOrgList.classList.remove('disabled')
-      }
-
-      if ( findConds === false ) {
         currDestList.parentElement.setAttribute('onclick', `passDest(${x})`)
         currDestList.classList.remove('disabled')
         destList.parentElement.removeAttribute('onclick')

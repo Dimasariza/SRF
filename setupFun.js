@@ -74,3 +74,38 @@ function addChd(c, txt, d, set, i) {
         } 
     }
 }
+
+    //  Function to append div element
+function addDiv (conds){
+    let divParr = gEl('dinamicInfo', 0)
+    let div1 = document.createElement('div')
+    let div2 = document.createElement('div')
+    let h6 = document.createElement('h6')
+    let spanLat = document.createElement('span')
+    let spanLng = document.createElement('span')
+    let breakLine = document.createElement('br')
+    let lat = document.createTextNode('Lat :')
+    let lng = document.createTextNode('Lng :')
+    let h6Text = document.createTextNode('Ship Coordinate')
+
+    if ( conds == "a"){
+        divParr.appendChild(div1)
+        div1.appendChild(div2)
+        div1.classList.add('dinamicContent', 'text-light')
+        div2.appendChild(h6)
+        h6.appendChild(h6Text)
+        div2.classList.add('latLan')
+        div2.appendChild(spanLat)
+        spanLat.appendChild(lat)
+        spanLat.appendChild(breakLine)
+        div2.appendChild(spanLng)
+        spanLng.appendChild(lng)
+    } 
+    if ( conds == "r") {
+        let child = divParr.lastElementChild; 
+        for (let i = 0 ; i < divParr.children.length ; i++) {
+            divParr.removeChild(child);
+        }
+    }
+
+}

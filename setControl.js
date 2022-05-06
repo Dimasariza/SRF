@@ -1,38 +1,11 @@
+  // ===============================================Test function here
 document.addEventListener('keydown', function(event){
-  // event.preventDefault ()
-  switch ( event.key ) {
-    case "Escape":
-      fullScrFun()
-      console.log('exit')
-      break;
-    case event.key = "f" :
-      console.log('fullscr')
-      fullScrFun()
-      break
-    case event.key = "t" :
-      var pointA = new L.LatLng(18.635308, 110.22496);
-      var pointB = new L.LatLng(10.984461, 118.70641);
-      var pointList = [pointA, pointB];
-      
-      var firstpolyline = new L.Polyline(pointList, {
-          color: 'red',
-          weight: 3,
-          opacity: 0.5,
-          smoothFactor: 1
-      });
-      firstpolyline.addTo(map);
-
-
-      break
-      case event.key = "y" :
-
-        console.log('y')
-
-    // }
-      break;
-
-    default :
-      console.log(event.key)
+  if(event.key === "Escape"){
+    event.preventDefault()
+    console.log('exit')
+	}
+  if(event.key === 'f') {
+    fullScrFun()
   }
 });
 
@@ -93,3 +66,55 @@ let fullScrFun = function() {
   }
 }
 fscr.addEventListener("click", fullScrFun)
+
+  //  set routing button
+let findBtn = gEl('findBtn', 0)
+let portBtn = gEl('portBtn')
+let cancelBtn = gEl('cancelBtn', 0)
+function setFindBtn() {
+  for ( let i = 0 ; i < portBtn.length ; i++) {
+    portBtn[i].classList.add('disabled')
+    cancelBtn.removeAttribute('disabled')
+    findBtn.textContent = 'Voyage'
+  }
+}
+findBtn.addEventListener('click', setFindBtn)
+
+function setCancelBtn () {
+  for ( let i = 0 ; i < portBtn.length ; i++) {
+    portBtn[i].classList.remove('disabled')
+    findBtn.textContent = 'Find'
+    map.removeLayer(mainShip)
+    miniMap.removeLayer(miniShip)
+    map.removeLayer(polyline)
+  }
+
+  if ( anchorOrg_1.length == 0 && anchorOrg_2.length !== 0 ) {
+    map.removeLayer(anchorOrg2)
+  } else if ( anchorOrg_1.length !== 0 && anchorOrg_2.length == 0) {
+    map.removeLayer(anchorOrg1)
+  }
+
+  if ( anchorDest_1.length == 0 && anchorDest_2.length != 0 ) {
+      map.removeLayer(anchorDest2)
+  } else if (anchorDest_1.length !=0 && anchorDest_2.length == 0) {
+    map.removeLayer(anchorDest1)
+  }
+}
+cancelBtn.addEventListener('click', setCancelBtn )
+
+let expInfo = gEl('expand_more',0)
+let shipInfo = gEl("dinamicInfo", 0)
+function expInfoFun(){
+  if( expInfo.classList.contains('active') === false) {
+    expInfo.classList.add('active')
+    expInfo.textContent = 'keyboard_arrow_down'
+    addDiv("a")
+  } else if ( expInfo.classList.contains('active') === true) {
+    expInfo.textContent = 'keyboard_arrow_up'
+    expInfo.classList.remove('active')
+    addDiv("r")
+  }
+}
+expInfo.addEventListener('click', expInfoFun)
+
