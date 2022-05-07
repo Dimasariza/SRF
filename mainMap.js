@@ -61,12 +61,12 @@ map.on('mousemove', function(event){
 
 const shipIcon = L.icon({
   iconUrl: "./src/img/shipIcon.svg",
-  iconSize : [60,40],
-  iconAnchor : [28, 16],
+  iconSize : [30,30],
+  iconAnchor : [18, 16],
 });
 
 const anchorIcon = L.icon({
-  iconUrl: "./src/img/anchor point.png",
+  iconUrl: "./src/img/anchorIcon.svg",
   iconSize : [30,30],
 })
 

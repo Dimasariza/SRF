@@ -28,7 +28,7 @@ miniMap.setView([latOrg,lngOrg], 15,{
 });
 
 let latlngs = [[latOrg, lngOrg],[latDest, lngDest]]
-this.polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
+this.polyline = L.polyline(latlngs, {color: 'blue', weight: 2, opacity: 0.5}).addTo(map);
 
 // let miniShipMarker = L.marker([-7.202638784078749, 112.7179207686899], {icon: shipIcon}).addTo(miniMap)
 // miniShipMarker.bindPopup("Ship Name : MV.Toba Dreams <br> ID : Idn 001 <br> Flag : Indonesia")

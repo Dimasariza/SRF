@@ -1,0 +1,14 @@
+May 2022 3.00 am
+
+1. masih perlu fixing bugs pada saat tombol find ditekan ke dua kali itu harusnya iconnya tampil lagi
+2. perlu menambah hide icon setelah icon pelabuhan muncul
+
+
+// refrence
+1. ship sail speed limmit
+https://www.marineinsight.com/guidelines/speed-of-a-ship-at-sea/
+{
+    container ships : 16 to 24 knots
+}
+2. geoJson library
+https://docs.eegeo.com/eegeo.js/v0.1.780/docs/leaflet/L.Polyline/
