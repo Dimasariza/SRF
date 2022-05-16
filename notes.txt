@@ -12,3 +12,159 @@ https://www.marineinsight.com/guidelines/speed-of-a-ship-at-sea/
 }
 2. geoJson library
 https://docs.eegeo.com/eegeo.js/v0.1.780/docs/leaflet/L.Polyline/
+
+
+
+
+var poly = {
+    "type": "Feature",
+    "properties": {},
+    "geometry": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            105,
+            1
+          ],
+          [
+            115,
+            -1
+          ],
+          [
+            105,
+            0
+          ],
+          [
+            95,
+            -1
+          ],
+          [
+            105,
+            1
+          ]
+        ]
+      ]
+    }
+  }
+
+
+
+var lines = {
+    "type": "Feature",
+    "properties": {},
+    "geometry": {
+      "type": "MultiLineString",
+      "coordinates": [
+      [[
+          44,
+          46.5
+        ],
+        [
+          56,
+          46.5
+        ]],
+       [[
+          44,
+          46.8
+        ],
+        [
+          50,
+          46.8
+        ]],
+        [[
+          50,
+          46.3
+        ],
+        [
+          56,
+          46.3
+        ]],
+        [[
+          44,
+          44.5
+        ],
+        [
+          56,
+          44.5
+        ]],
+        [[
+          48,
+          45
+        ],
+        [
+          56,
+          45
+        ]],
+        [[
+          44,
+          45.5
+        ],
+        [
+          51.5,
+          45.5
+        ]],
+        [[
+          46.4,
+          44
+        ],
+        [
+          53.7,
+          44
+        ]]
+      ]
+    }
+  }
+
+var polyStyle = {
+  "color": "#ff7800",
+  "weight": 5,
+  "opacity": 0.65
+};
+
+var polyLayer = L.geoJSON(poly, {
+  style: polyStyle
+}).addTo(map);
+
+var lineStyle = {
+  "color": "#ff7800",
+  "weight": 5,
+  "opacity": 0.65
+};
+
+var lineLayer = L.geoJSON(poly, {
+  style: lineStyle
+}).addTo(map);
+
+map.fitBounds(lineLayer.getBounds());
+
+lines.geometry.coordinates.forEach(part => {
+let split = turf.lineSplit(turf.lineString(part), poly);
+let oddPair;
+if(turf.booleanPointInPolygon(turf.point(part[0]), poly)){
+  oddPair = 0;
+} else {
+  oddPair = 1;
+}
+split.features.forEach((splitedPart, i) => {
+  if((i + oddPair)%2 === 0) {
+    L.geoJSON(splitedPart.geometry).addTo(map);
+  }
+});
+});
+
+
+
+//==============================================================================================
+// asistensi 13 mei 2022 
+1. kecepatan
+2. 
+3. time departure
+4. esimate time arrival
+5. radius kapal dari pingir pantai 100m
+6. max steer 35 deg port side and star board
+7. jarak antara pingir pantai ke kapal kira kira 15 nm
+8. pembuatan skenario dari port a ke boar
+   kemudian di test ke port yang lainnya
+  untuk menentukan apakah algoritma nya dapat di uji coba ke port lainnya
+9. ganti ship icon jadi icon yang lebih real

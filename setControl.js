@@ -6,18 +6,35 @@ document.addEventListener('keydown', function(event){
 	}
   if(event.key === 'f') {
     fullScrFun()
+  } 
+
+  if (event.key === 't') {
+    console.log('test')
+    console.log(
+      turf.booleanIntersects(line, point)
+  )
+
+  }
+  
+  if (event.key === 'q') {
+  
+    anchorOrg1.addEventListener('click', _markerOnClick);
+
+    var _markerOnClick = function(e) {
+      console.log(e)
+    }
+
+
+    // test here
+    // console.log(featureCollection.features.length)
+
   }
 });
 
 //  =========================== Start from here ===========================================================
 
-for (let i = 0 ; i < gEl('close').length; i++ ) {
-  gEl('close', i).addEventListener('click', rmActive )
-}
 
-function rmActive () {
-  expFun()
-}
+
 
 // Adding click event on route explore
 let portInfo = gEl('portInfo', 0)
@@ -40,7 +57,9 @@ let expFun = function(){
     }
   } 
 routeExplore.addEventListener('click', expFun)
-
+for (let i = 0 ; i < gEl('close').length; i++ ) {
+  gEl('close', i).addEventListener('click', expFun )
+}
 
   // Adding click event on route Info
 let infoFun = () => {
@@ -77,6 +96,7 @@ function setFindBtn() {
     cancelBtn.removeAttribute('disabled')
     findBtn.textContent = 'Voyage'
   }
+  findBtn.classList.add('voyage')
 }
 findBtn.addEventListener('click', setFindBtn)
 
@@ -86,7 +106,9 @@ function setCancelBtn () {
     findBtn.textContent = 'Find'
     map.removeLayer(mainShip)
     miniMap.removeLayer(miniShip)
-    map.removeLayer(polyline)
+    map.removeLayer(wayLine)
+    miniMap.removeLayer(miniCircle)
+    clearInterval(shipVoyage)
   }
 
   if ( anchorOrg_1.length == 0 && anchorOrg_2.length !== 0 ) {
@@ -100,6 +122,8 @@ function setCancelBtn () {
   } else if (anchorDest_1.length !=0 && anchorDest_2.length == 0) {
     map.removeLayer(anchorDest1)
   }
+
+
 }
 cancelBtn.addEventListener('click', setCancelBtn )
 
@@ -117,4 +141,6 @@ function expInfoFun(){
   }
 }
 expInfo.addEventListener('click', expInfoFun)
+
+
 

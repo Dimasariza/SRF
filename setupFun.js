@@ -80,26 +80,51 @@ function addDiv (conds){
     let divParr = gEl('dinamicInfo', 0)
     let div1 = document.createElement('div')
     let div2 = document.createElement('div')
-    let h6 = document.createElement('h6')
+    let div3 = document.createElement('div')
+    let h6coor = document.createElement('h6')
+    let h6stat = document.createElement('h6')
     let spanLat = document.createElement('span')
     let spanLng = document.createElement('span')
-    let breakLine = document.createElement('br')
+    let spanLink = document.createElement('span')
+    let spanStatus = document.createElement('span')
+    let breakLine1 = document.createElement('br')
+    let breakLine2 = document.createElement('br')
+    let addA = document.createElement('a')
     let lat = document.createTextNode('Lat :')
     let lng = document.createTextNode('Lng :')
-    let h6Text = document.createTextNode('Ship Coordinate')
+    let stat = document.createTextNode('Status : safe')
+    let linkSource = document.createTextNode('See source code here')
+    let h6Text1 = document.createTextNode('Coordinate')
+    let h6Text2= document.createTextNode('Status')
 
     if ( conds == "a"){
         divParr.appendChild(div1)
         div1.appendChild(div2)
+        div1.appendChild(div3)
         div1.classList.add('dinamicContent', 'text-light')
-        div2.appendChild(h6)
-        h6.appendChild(h6Text)
+        div2.appendChild(h6coor)
+        h6coor.appendChild(h6Text1)
         div2.classList.add('latLan')
         div2.appendChild(spanLat)
         spanLat.appendChild(lat)
-        spanLat.appendChild(breakLine)
+        spanLat.appendChild(breakLine1)
         div2.appendChild(spanLng)
         spanLng.appendChild(lng)
+        spanLat.classList.add('shipLat')
+        spanLng.classList.add('shipLng')
+        
+        div3.appendChild(h6stat)
+        h6stat.appendChild(h6Text2)
+        div3.classList.add('status')
+        div3.appendChild(spanStatus)
+        spanStatus.appendChild(stat)
+        spanStatus.appendChild(breakLine2)
+        div3.appendChild(spanLink)
+        spanLink.appendChild(addA)
+        addA.href = 'https://github.com/Dimasariza/Tugas_Akhir'
+        addA.title = "Github link - source code";
+        addA.appendChild(linkSource)
+        addA.target = "_blank"
     } 
     if ( conds == "r") {
         let child = divParr.lastElementChild; 
@@ -108,4 +133,13 @@ function addDiv (conds){
         }
     }
 
+}
+
+
+    // Doing test preload here
+
+
+let test;
+function preload() {
+    test = loadJSON('./src/data/pelabuhan/dataPelabuhan.json')
 }

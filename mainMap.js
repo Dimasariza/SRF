@@ -1,3 +1,13 @@
+// test here
+var mapsPlaceholder = [];
+    
+// http://leafletjs.com/reference-1.1.0.html#class-constructor-hooks
+L.Map.addInitHook(function () {
+  mapsPlaceholder.push(this); // Use whatever global scope variable you like.
+});
+
+
+
   // Adding an OSM map
 const map = L.map('map', {
       zoomControl:false}).setView([2.8,113 ], 5);
@@ -39,6 +49,7 @@ for ( let i = 11; i <= 44; i++) {
   getData = `./src/data/provinsi/${i}.geojson`;
   urlData.push(getData)
 }
+
 let segmentArea = new L.GeoJSON.AJAX(urlData,{onEachFeature:popUp, style: areaStyle});
 
 let baseLayers = {
@@ -52,17 +63,24 @@ let control = L.control.layers(baseLayers).addTo(map);
 map.on('mousemove', function(event){
   let lat = event.latlng.lat,
   lng = event.latlng.lng
-  if (lng < 90 || lng > 150 || lat > 10 || lat < -13 ) {
-    map.dragging.disable();
-  } else if(lng >= 90 || lng <= 150 || lat <= 10 || lat >= -13 ){
-    map.dragging.enable();
-  }
+  // console.log(lat, lng)
+  // if (lng < 90 || lng > 150 || lat > 10 || lat < -13 ) {
+  //   map.dragging.disable();
+  // } else if(lng >= 90 || lng <= 150 || lat <= 10 || lat >= -13 ){
+  //   map.dragging.enable();
+  // }
 });
 
 const shipIcon = L.icon({
-  iconUrl: "./src/img/shipIcon.svg",
-  iconSize : [30,30],
-  iconAnchor : [18, 16],
+  iconUrl: "./src/img/myship.svg",
+  iconSize : [40,40],
+  iconAnchor : [20, 8],
+});
+
+const miniShipIcon = L.icon({
+  iconUrl: "./src/img/myship.svg",
+  iconSize : [50,50],
+  iconAnchor : [30, 24],
 });
 
 const anchorIcon = L.icon({
@@ -118,10 +136,10 @@ async function getPortData (i) {
       portName = data[i].Pelabuhan 
       console.log(portName)
       if ( findButton.hasAttribute('disabled') === false ) {
-        let orgX = data[portIdx[0]].LatLng[0],
-            orgY = data[portIdx[0]].LatLng[1],
-            destX = data[portIdx[1]].LatLng[0],
-            destY = data[portIdx[1]].LatLng[1]
+        let orgX = data[portIdx[0]].sandar[0],
+            orgY = data[portIdx[0]].sandar[1],
+            destX = data[portIdx[1]].sandar[0],
+            destY = data[portIdx[1]].sandar[1]
         findButton.setAttribute('onclick', `wayPoint( ${orgX} , ${orgY}, ${destX}, ${destY})`)
         console.log(portIdx)
       }
@@ -152,6 +170,18 @@ async function getPortData (i) {
   }
 }
 getPortData("Load")
+
+// =================================== get data provinsi
+async function getProvinsiData () {
+  for ( let i = 11 ; i <= 44 ; i++) {
+    let urlPortData = `./src/data/provinsi/${i}.geojson`
+    let response = await fetch(urlPortData);
+    dataProv = await response.json()
+    this["provinsi" + i]  = dataProv.features[0].geometry
+    console.log('provinsi' + i)
+  }
+}
+getProvinsiData()
 
 function  passOrg(i) {
   let findConds = findButton.hasAttribute('disabled')
@@ -215,3 +245,7 @@ function switchPort (i, j) {
     portIdx[1] = i
   } 
 }
+
+let current = new Date()
+
+console.log(current)
