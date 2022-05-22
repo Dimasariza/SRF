@@ -1,38 +1,39 @@
-// test here
-var mapsPlaceholder = [];
-    
-// http://leafletjs.com/reference-1.1.0.html#class-constructor-hooks
-L.Map.addInitHook(function () {
-  mapsPlaceholder.push(this); // Use whatever global scope variable you like.
-});
-
-
-
-  // Adding an OSM map
-const map = L.map('map', {
-      zoomControl:false}).setView([2.8,113 ], 5);
-      map.attributionControl.setPrefix(false)  
-      map.options.minZoom = 5;
-      map.options.maxZoom = 18;
+    /*
+    * Dimas Ariza
+    * source code link : 'https://github.com/Dimasariza/Tugas_Akhir'
+    * Get all data we need
+    * We embed Indonesian segment Area and devide it into several provinces
+    * We also embed ship container port (TPK) in some areas
+    */
   
-  // Adding satelite Layer
-const attr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const tilesMap = L.tileLayer(tileUrl, {attr});
-
-const googleSat = L.tileLayer("http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",{
-      minZoom: 5,
-      maxZoom:18,
-      subdomains:['mt0','mt1','mt2','mt3']
-});
-googleSat.addTo(map);
-
-const areaStyle = {
-  "color": "rgba(255, 0, 0, .01)",
-  "fillColor": "rgba(255, 0, 0, 1)",
-  "opacity": 1,
-  "weight" : 0.4  
+  // ============================================= Get Provinces Data ============================================= //
+let segmentArea = new L.FeatureGroup();
+let provinceNum = 44
+let provStart = 11
+let provName = new Array
+let provinces;
+let provStyle = {      
+    color: "rgba(255, 0, 0, 1)",
+    fillColor: "rgba(255, 0, 0, 1)",
+    weight : 0.4  
 }
+
+async function getProvinsiData () {
+  for ( let i = provStart ; i <= provinceNum ; i++) {
+    let urlProvData = `./src/data/provinsi/${i}.geojson`
+    let response = await fetch(urlProvData);
+        dataProv = await response.json()
+    let featureData = dataProv.features[0]
+    this["provinsi" + i]  = featureData
+        provName.push(featureData.properties.Provinsi)
+        provinces = L.geoJSON(this["provinsi" + i])
+        provinces.setStyle(provStyle);
+        popUp(featureData, provinces)
+        segmentArea.addLayer(provinces)
+  }
+  getPortData("Load")
+}
+getProvinsiData()
 
 function popUp(f,l){
   let out = [];
@@ -44,52 +45,9 @@ function popUp(f,l){
   }
 }
 
-let urlData = new Array;
-for ( let i = 11; i <= 44; i++) {
-  getData = `./src/data/provinsi/${i}.geojson`;
-  urlData.push(getData)
-}
-
-let segmentArea = new L.GeoJSON.AJAX(urlData,{onEachFeature:popUp, style: areaStyle});
-
-let baseLayers = {
-  "Segment Area": segmentArea,
-  "OpenSea Map": tilesMap,
-  "Google Map": googleSat,
-}
-let control = L.control.layers(baseLayers).addTo(map);
-
-  // Give limits in Indonesia area
-map.on('mousemove', function(event){
-  let lat = event.latlng.lat,
-  lng = event.latlng.lng
-  // console.log(lat, lng)
-  // if (lng < 90 || lng > 150 || lat > 10 || lat < -13 ) {
-  //   map.dragging.disable();
-  // } else if(lng >= 90 || lng <= 150 || lat <= 10 || lat >= -13 ){
-  //   map.dragging.enable();
-  // }
-});
-
-const shipIcon = L.icon({
-  iconUrl: "./src/img/myship.svg",
-  iconSize : [40,40],
-  iconAnchor : [20, 8],
-});
-
-const miniShipIcon = L.icon({
-  iconUrl: "./src/img/myship.svg",
-  iconSize : [50,50],
-  iconAnchor : [30, 24],
-});
-
-const anchorIcon = L.icon({
-  iconUrl: "./src/img/anchorIcon.svg",
-  iconSize : [30,30],
-})
-
-  // Get port data =======================================================================================
+  // ============================================= Get Ports Data ============================================= //
 let portIdx = new Array
+let portCoorData = new Object
 this.anchorOrg1
 this.anchorDest1;
 this.anchorOrg2;
@@ -99,11 +57,11 @@ let anchorOrg_1 = gEl('anchor_org1')
 let anchorOrg_2 = gEl('anchor_org2')
 let anchorDest_1 = gEl('anchor_dest1')
 let anchorDest_2 = gEl('anchor_dest2')
+
 async function getPortData (i) {
-  const urlPortData = "./src/data/pelabuhan/dataPelabuhan.json"
-  const response = await fetch(urlPortData);
-  const data = await response.json()
-    
+const urlPortData = "./src/data/pelabuhan/dataPelabuhan.json"
+const response = await fetch(urlPortData);
+const data = await response.json()
   if ( typeof i !== 'number') {
     for ( let item = 0; item < data.length ; item++ ) {
       if ( i === "Load" ) {
@@ -123,26 +81,41 @@ async function getPortData (i) {
     }
   }
 
-  // Passing data to way point algorithm
+  // Pass the data coordinate to way point algorithm
   if (typeof i === 'number') {
     if ( findButton.hasAttribute('disabled') && gEl('listOfDest').length < 1) {
       for (let item = 0; item < data.length ; item++) {
           addChd('liPortDest', `${data[item].Pelabuhan}`, "d" , `${item}`, i)
       }
-      let rmEl = gEl('liPortDest', 0)
-      rmEl.removeChild(gEl('liPortDest', 0, 0))
+    let rmEl = gEl('liPortDest', 0)
+        rmEl.removeChild(gEl('liPortDest', 0, 0))
     }
-    let portName;
-      portName = data[i].Pelabuhan 
-      console.log(portName)
-      if ( findButton.hasAttribute('disabled') === false ) {
-        let orgX = data[portIdx[0]].sandar[0],
-            orgY = data[portIdx[0]].sandar[1],
-            destX = data[portIdx[1]].sandar[0],
-            destY = data[portIdx[1]].sandar[1]
-        findButton.setAttribute('onclick', `wayPoint( ${orgX} , ${orgY}, ${destX}, ${destY})`)
-        console.log(portIdx)
-      }
+    if ( findButton.hasAttribute('disabled') === false ) {
+    let orgX = data[portIdx[0]].sandar[0],
+        orgY = data[portIdx[0]].sandar[1],
+        destX = data[portIdx[1]].sandar[0],
+        destY = data[portIdx[1]].sandar[1]
+
+    portCoorData = 
+    {
+      "portOrg":{
+         "portName": data[portIdx[0]].Pelabuhan,
+         "coor":[
+            orgY,
+            orgX
+         ]
+      },
+      "portDest":{
+        "portName": data[portIdx[1]].Pelabuhan,
+        "coor":[
+           destY,
+           destX
+        ]
+     }
+    }
+
+    // findButton.setAttribute('onclick', `wayPoint( ${orgX} , ${orgY}, ${destX}, ${destY})`)
+    }
 
     if ( anchorOrg_1.length == 0 ) {
       anchorOrg1 = L.marker(data[portIdx[0]].LatLng, {icon:  anchorIcon}).addTo(map)
@@ -169,27 +142,15 @@ async function getPortData (i) {
     }
   }
 }
-getPortData("Load")
 
-// =================================== get data provinsi
-async function getProvinsiData () {
-  for ( let i = 11 ; i <= 44 ; i++) {
-    let urlPortData = `./src/data/provinsi/${i}.geojson`
-    let response = await fetch(urlPortData);
-    dataProv = await response.json()
-    this["provinsi" + i]  = dataProv.features[0].geometry
-    console.log('provinsi' + i)
-  }
-}
-getProvinsiData()
-
+    // Origin port coordinates data control
 function  passOrg(i) {
-  let findConds = findButton.hasAttribute('disabled')
-  let orgList = gEl(`${[i]}_pO`, 0)
-  let x = portIdx[0]
-  let currOrgList = gEl(`${x}_pO`, 0)
-  let currDestList = gEl(`${[x]}_pD`, 0) 
-  let destList = gEl(`${[i]}_pD`, 0)
+let findConds = findButton.hasAttribute('disabled')
+let orgList = gEl(`${[i]}_pO`, 0)
+let x = portIdx[0]
+let currOrgList = gEl(`${x}_pO`, 0)
+let currDestList = gEl(`${[x]}_pD`, 0) 
+let destList = gEl(`${[i]}_pD`, 0)
 
     gEl('portOfOrg', 0).textContent = orgList.innerText
     orgList.classList.add('disabled')
@@ -203,11 +164,11 @@ function  passOrg(i) {
         destList.parentElement.removeAttribute('onclick')
         destList.classList.add('disabled')
       }
-
     getPortData(i)
     switchPort( i , 'org')
 }
 
+    // Destination port coordinates data control
 function  passDest(i) {
   let findConds = findButton.hasAttribute('disabled')
   let y = portIdx[1]
@@ -215,15 +176,13 @@ function  passDest(i) {
   let currDestList = gEl(`${[y]}_pD`, 0) 
   let orgList = gEl(`${[i]}_pO`, 0)
   let currOrgList = gEl(`${[y]}_pO`, 0)
-
-  orgList.parentElement.removeAttribute('onclick')
-  orgList.classList.add('disabled')
+      orgList.parentElement.removeAttribute('onclick')
+      orgList.classList.add('disabled')
 
     if (findConds === false && currDestList.classList.contains('disabled') === true) {
       currDestList.parentElement.setAttribute('onclick', `passDest(${y})`)
       currDestList.classList.remove('disabled')
     }
-
     if ( findConds === false ) {
       currOrgList.parentElement.setAttribute('onclick', `passOrg(${y})`)
       currOrgList.classList.remove('disabled')
@@ -233,11 +192,11 @@ function  passDest(i) {
   gEl('portOfDest', 0).textContent = destList.innerText
   destList.classList.add('disabled')
   destList.parentElement.removeAttribute('onclick')
-
   getPortData(i)
   switchPort( i , 'dest')
 }
 
+    // Switch Port data control
 function switchPort (i, j) {
   if ( j === 'org') {
     portIdx[0] = i
@@ -245,7 +204,3 @@ function switchPort (i, j) {
     portIdx[1] = i
   } 
 }
-
-let current = new Date()
-
-console.log(current)

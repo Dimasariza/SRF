@@ -134,12 +134,3 @@ function addDiv (conds){
     }
 
 }
-
-
-    // Doing test preload here
-
-
-let test;
-function preload() {
-    test = loadJSON('./src/data/pelabuhan/dataPelabuhan.json')
-}

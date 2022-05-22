@@ -101,8 +101,11 @@ h5 {
 /* Search rute bar */
 .start {
   z-index: 9997;
-  margin: 5.5rem 0.7rem  ;
+  margin: 5.5rem 0.7rem;
   display: flex;
+  justify-content: flex-end;
+  width: 2rem;
+  grid-area: side-bar;
   justify-self: end;
 }
 
@@ -111,8 +114,8 @@ h5 {
   width: 15rem;
   height:99vh;
   background-color: var(--dark-color);
-  align-self: flex-start;
-  justify-self: end;
+  /* align-self: flex-start; */
+  /* justify-self: end; */
   border-radius: 0.5rem;
   padding: 1rem;
   margin-right: 0.5rem;

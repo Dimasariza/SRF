@@ -97,6 +97,9 @@ function setFindBtn() {
     findBtn.textContent = 'Voyage'
   }
   findBtn.classList.add('voyage')
+  wayPoint()
+  
+
 }
 findBtn.addEventListener('click', setFindBtn)
 
@@ -106,7 +109,7 @@ function setCancelBtn () {
     findBtn.textContent = 'Find'
     map.removeLayer(mainShip)
     miniMap.removeLayer(miniShip)
-    map.removeLayer(wayLine)
+    map.removeLayer(fixWL)
     miniMap.removeLayer(miniCircle)
     clearInterval(shipVoyage)
   }

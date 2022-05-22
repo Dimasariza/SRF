@@ -1,7 +1,4 @@
-May 2022 3.00 am
 
-1. masih perlu fixing bugs pada saat tombol find ditekan ke dua kali itu harusnya iconnya tampil lagi
-2. perlu menambah hide icon setelah icon pelabuhan muncul
 
 
 // refrence
@@ -154,6 +151,16 @@ split.features.forEach((splitedPart, i) => {
 });
 
 
+function checkIntersect(f, i) {
+  let layersId = new Array
+  for ( item in f._layers) {
+    parseInt(item)
+    layersId.push(parseInt(item))
+  }
+  let attr = f._layers[layersId[i]].feature
+  return attr
+}
+
 
 //==============================================================================================
 // asistensi 13 mei 2022 
@@ -168,3 +175,8 @@ split.features.forEach((splitedPart, i) => {
    kemudian di test ke port yang lainnya
   untuk menentukan apakah algoritma nya dapat di uji coba ke port lainnya
 9. ganti ship icon jadi icon yang lebih real
+
+
+
+// 19 mei 22
+1. masih ada bugs dalam pemilihan lineintersection, karna pengambilan line intersection bukan melalui pelabuhan org ke poly terdekat
