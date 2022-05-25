@@ -24,16 +24,27 @@ async function getProvinsiData () {
     let response = await fetch(urlProvData);
         dataProv = await response.json()
     let featureData = dataProv.features[0]
+    let area = dataProv.name
     this["provinsi" + i]  = featureData
-        provName.push(featureData.properties.Provinsi)
-        provinces = L.geoJSON(this["provinsi" + i])
-        provinces.setStyle(provStyle);
-        popUp(featureData, provinces)
-        segmentArea.addLayer(provinces)
+    provinces = L.geoJSON(this["provinsi" + i])
+    provinces.setStyle(provStyle);
+    popUp(featureData, provinces)
+    segmentArea.addLayer(provinces)
+    provName.push(featureData.properties.Provinsi)
+    merge(featureData, area)
+    i == provinceNum ? console.log("ready") : console.log("wait")
+  }
+  function merge(prov, area) {
+    if (this[area] === undefined) {
+      this[area] = prov
+    } else if ( this[area]) {
+      this[area] = turf.union(this[area], prov)
+    }
   }
   getPortData("Load")
 }
 getProvinsiData()
+
 
 function popUp(f,l){
   let out = [];

@@ -129,7 +129,7 @@ var lineStyle = {
   "opacity": 0.65
 };
 
-var lineLayer = L.geoJSON(poly, {
+var lineLayer = L.geoJSON(lines, {
   style: lineStyle
 }).addTo(map);
 

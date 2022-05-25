@@ -98,8 +98,6 @@ function setFindBtn() {
   }
   findBtn.classList.add('voyage')
   wayPoint()
-  
-
 }
 findBtn.addEventListener('click', setFindBtn)
 
@@ -107,11 +105,11 @@ function setCancelBtn () {
   for ( let i = 0 ; i < portBtn.length ; i++) {
     portBtn[i].classList.remove('disabled')
     findBtn.textContent = 'Find'
-    map.removeLayer(mainShip)
-    miniMap.removeLayer(miniShip)
-    map.removeLayer(fixWL)
-    miniMap.removeLayer(miniCircle)
-    clearInterval(shipVoyage)
+    // map.removeLayer(mainShip)
+    // miniMap.removeLayer(miniShip)
+    // map.removeLayer(fixWL)
+    // miniMap.removeLayer(miniCircle)
+    // clearInterval(shipVoyage)
   }
 
   if ( anchorOrg_1.length == 0 && anchorOrg_2.length !== 0 ) {
