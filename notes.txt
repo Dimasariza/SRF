@@ -151,15 +151,6 @@ split.features.forEach((splitedPart, i) => {
 });
 
 
-function checkIntersect(f, i) {
-  let layersId = new Array
-  for ( item in f._layers) {
-    parseInt(item)
-    layersId.push(parseInt(item))
-  }
-  let attr = f._layers[layersId[i]].feature
-  return attr
-}
 
 
 //==============================================================================================
@@ -177,6 +168,8 @@ function checkIntersect(f, i) {
 9. ganti ship icon jadi icon yang lebih real
 
 
-
-// 19 mei 22
-1. masih ada bugs dalam pemilihan lineintersection, karna pengambilan line intersection bukan melalui pelabuhan org ke poly terdekat
+//===============================================================================================
+Progress 26 Mei 2022
+1. masih ada bug di TPK pelawan dan PT IPC Terminal Peti Kemas (kesalahan pada saat mencari radius)
+2. ubah algoritma radius bertambah panjanga jika obsteclenya jauh
+3. masih ada bug pada saat mengenerate beberapa wayline di beberapa pelauhan, ada kesalahan pada newwaycoor

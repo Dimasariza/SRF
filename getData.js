@@ -18,6 +18,7 @@ let provStyle = {
     weight : 0.4  
 }
 
+let mergeArea = new Array
 async function getProvinsiData () {
   for ( let i = provStart ; i <= provinceNum ; i++) {
     let urlProvData = `./src/data/provinsi/${i}.geojson`
@@ -37,6 +38,7 @@ async function getProvinsiData () {
   function merge(prov, area) {
     if (this[area] === undefined) {
       this[area] = prov
+      mergeArea.push(area)
     } else if ( this[area]) {
       this[area] = turf.union(this[area], prov)
     }

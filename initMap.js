@@ -15,6 +15,7 @@ const map = L.map('map', {
   map.attributionControl.setPrefix(false)  
   map.options.minZoom = minZoom;
   map.options.maxZoom = maxZoom;
+  map.doubleClickZoom.disable();
    
    // Add OSM - main Map
 const attr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -77,3 +78,7 @@ let baseLayers = {
   "Google Map": googleSat,
 }
 L.control.layers(baseLayers).addTo(map);
+
+map.on('dblclick', function(e) {
+  console.log(e.latlng);
+});

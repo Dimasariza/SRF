@@ -107,7 +107,7 @@ function setCancelBtn () {
     findBtn.textContent = 'Find'
     // map.removeLayer(mainShip)
     // miniMap.removeLayer(miniShip)
-    // map.removeLayer(fixWL)
+    // map.removeLayer(fixWayLine)
     // miniMap.removeLayer(miniCircle)
     // clearInterval(shipVoyage)
   }

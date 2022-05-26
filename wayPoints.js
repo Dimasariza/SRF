@@ -12,70 +12,142 @@ function wayPoint() {
     this.angle = turf.bearing(portOrg.coor,portDest.coor)
 
     this.wayLine = turf.lineString(wayCoor, {name: 'first analysis line'});
+    // this.fixWayLine = L.geoJSON(this.wayLine, {style : lineStyle}).addTo(map)
+    this.newWayCoor = new Array
     
-    L.geoJson(wayLine, {style:lineStyle}).addTo(map)
     checkLine(wayLine)
-    if( intersectLine.length == 1 ) {
-        intersectCoor(wayLine)
-    } else if (intersectLine.length > 1 && intersectLine.length <= provinceNum) {
-        this.firstProv = ""
-        this.mergeProv = ""
-        intersectLine.forEach(mergeObstacle)
+    if (intersectLine) {
+        intersectCoor(this.wayLine)
     }
+}
+
+function switchCoor(lat, lan) {
+    let coord = [lan, lat]
+    return coord
+}
+
+function getLength (line){
+    let length = turf.length(line)
+    return length
+}
+
+function getCoorPt(pt) {
+    let coord = turf.getCoord(pt)
+    return coord
+}
+
+
+function getSplit (line, poly) {
+    let split = turf.lineSplit(line, poly)
+    return split
+}
+
+function ptInPoly(pt, poly) {
+    let point = turf.booleanPointInPolygon(pt, poly)
+    return point
+}
+
+function returnIdx(split){
+    split = split.features
+    let splitArr = new Array
+    let ptToLine = new Array
+    for (item in split){
+        let length = turf.pointToLineDistance(turf.point(wayCoor[0]), split[item])
+        ptToLine.push(length)
+    }
+    var result = Array.from(Array(ptToLine.length).keys())
+    .sort((a, b) => ptToLine[a] < ptToLine[b] ? -1 : (ptToLine[b] < ptToLine[a]) | 0)
+    for ( item in result) {
+        splitArr.push(split[result[item]])
+    }
+    return splitArr
 }
 
 function checkLine(line) {
     this.intersectLine = new Array
-    for ( let i = provStart ; i <= provinceNum ; i++) {
-        let check = turf.booleanIntersects(line, this["provinsi" + i])
+    for (let item in mergeArea) {
+        let check = turf.booleanIntersects(line, this[mergeArea[item]])
         if ( check ) {
-        this.intersectLine.push(this["provinsi" + i])
+        this.intersectLine.push(this[mergeArea[item]])
         }
     }
 }
 
-let merger = false
-function mergeObstacle(prov, index) {
-    if( !merger ){
-        this.firstProv = prov
-        merger = true
-    } else if (merger && this.mergeProv === '') {
-    this.mergeProv = turf.union(this.firstProv, prov)
-        if(intersectLine.length == 2) {
-            intersectCoor(wayLine)
+let midsPoint = new Array
+function intersectCoor (line) {
+    for ( let item in intersectLine) {
+        let intersectPoly = intersectLine[item]
+        let lineSplit = getSplit(line, intersectPoly)
+        this.newLine = returnIdx(lineSplit)
+        for(let lines in this.newLine) {
+            let collectLine = this.newLine[lines]
+            let lineCoor = collectLine.geometry.coordinates
+            let midPoint = turf.midpoint(...lineCoor)
+            midsPoint.push(midPoint)
+            let pointOnPoly = ptInPoly(midPoint, intersectPoly)
+            if (pointOnPoly){
+                let length = getLength(collectLine)
+                let maxPoint = checkMaxPpoint(length)
+                let latlon = getCoorPt(midPoint)
+                // generateCircle(...latlon)
+                let step = generatePoint(...latlon, intersectPoly)
+                for (let i = 1; i <= maxPoint ; i++){
+                    let along = turf.along(collectLine , length/maxPoint * i);
+                    let alongCoor = getCoorPt(along)
+                    // generatePoint(...alongCoor, intersectPoly)
+                    if (step){
+                        genLines(...alongCoor, intersectPoly,3)
+                    } else if (!step) {
+                        genLines(...alongCoor, intersectPoly,1)
+                    }
+                }
+                // there is error in this lice code
+                // L.geoJSON(turf.lineString(newWayCoor)).addTo(map)
+
+            }
+        // let latlon = this.newLine[lines].geometry.coordinates[0]
+        // generateCircle(...latlon)
         }
-    } else if (this.mergeProv && index <= provinceNum ){
-    this.mergeProv = turf.union(this.mergeProv, prov)
-        if(intersectLine.length == index + 1){
-            intersectCoor(wayLine)
-        }
-    } 
+    }
 }
 
-function intersectCoor (line) {
-    merger = false
-    this.intData = new Array
-    let lineSplit = turf.lineSplit(line, this.mergeProv)
-    this.newLine = lineSplit.features
-        for(let lines in this.newLine) {
-            let lineCoor = this.newLine[lines].geometry.coordinates
-            let midPoint = turf.midpoint(...lineCoor)
-            let pointOnPoly = turf.booleanPointInPolygon(midPoint, this.mergeProv)
-            if (pointOnPoly){
-                let length = getLength(this.newLine[lines])
-                let maxPoint = checkMaxPpoint(length)
-
-                for (let i = 1; i <= maxPoint ; i++){
-                    let along = turf.along(this.newLine[lines] , length/maxPoint * i);
-                    let alongCoor = along.geometry.coordinates
-                    genLines(...alongCoor)
-                }
-                L.geoJSON(this.newLine[lines]).addTo(map)
-            }
-
-            let latlon = this.newLine[lines].geometry.coordinates[0]
-            generateCircle(...latlon)
+let protect = 0
+let maxProtect = 30
+function generatePoint (lat, lon, poly){
+    let rad = 1000
+    let angle = this.angle
+    let checkPoint;
+    let nextpt
+    let step = true
+    do {
+        rad += 1000
+        if(step){
+            nextpt = nearestPoint(rad, angle + 90, lat, lon)
+            checkPoint = turf.point(nextpt)
+            step = false
+        } else if (!step){
+            nextpt = nearestPoint(rad, angle + 270, lat, lon)
+            checkPoint = turf.point(nextpt)
+            step = true
         }
+        protect += 1
+        if ( protect == maxProtect) {
+            break;
+        }    
+    } while (ptInPoly(checkPoint, poly))
+    this["rotateLine" + 0] = turf.lineString([[lat,lon],nextpt])
+    // L.geoJSON(this["rotateLine" + 0]).addTo(map)
+    return step
+}
+
+function nearestPoint(rad, angle, lat, lon) {
+    let oneMeterDist = 1 / 111195.0802335329
+    let latDeg = Math.sin(Math.PI / 180 * angle)
+    let lonDeg = Math.cos(Math.PI / 180 * angle)
+    let degLat = latDeg * rad * oneMeterDist 
+    let degLon = lonDeg * rad * oneMeterDist
+    let nextpt =  [lat + degLat,lon +  degLon]
+    return nextpt
 }
 
 function checkMaxPpoint(length){
@@ -104,28 +176,28 @@ function checkMaxPpoint(length){
     return maxPoint
 }
 
-function getLength (line){
-    let length = turf.length(line)
-    return length
-}
-
-function genLines(x,y) {
-    let oneMeterDist = 1 / 111195.0802335329
-    let posX = x
-    let posY = y
-    let rad = 50000
-    this.safeRotate = new Array
-
-    let angle = this.angle + 90 * 3
-    let xDeg = Math.sin(Math.PI / 180 * angle)
-    let yDeg = Math.cos(Math.PI / 180 * angle)
-    let degPosX = xDeg * rad * oneMeterDist 
-    let degPosY = yDeg * rad * oneMeterDist 
-    this["rotateLine" + 0] = turf.lineString([[posX,posY],[posX + degPosX,posY +  degPosY]])
+function genLines(lat,lon,poly,id) {
+    let rad = 1000
+    let angle = this.angle + 90 * id
+    let nextpt
+    let checkPoint
+    do{
+        rad += 1000
+        nextpt = nearestPoint(rad, angle, lat, lon)
+        checkPoint = turf.point(nextpt)
+        protect += 1
+        if(protect == maxProtect){
+            break;
+        }
+    } while(ptInPoly(checkPoint, poly))
+    this["rotateLine" + 0] = turf.lineString([[lat,lon],nextpt])
+    newWayCoor.push(nextpt)
     L.geoJSON(this["rotateLine" + 0]).addTo(map)        
 }
 
 function generateCircle(lat, lon){
+    // Delete code bellow
+
     // distance between lat to next lat = 111.1950802335329
     // let oneMeterDist = 1 / 111195.0802335329
     // let protect = 0
@@ -153,42 +225,14 @@ function generateCircle(lat, lon){
     // }
     // while (checkCircle(circle, prov))
     
-  keyAngle(lat,lon)
   this.currentCircle = L.circle([lon, lat], {radius : 1000}).addTo(map)
   this.currentCircle.setStyle(provStyle);
-
-}
-
-function keyAngle(x,y) {
-    // distance between lat to next lat = 111.1950802335329
-    let oneMeterDist = 1 / 111195.0802335329
-    let shipPosX = x
-    let shipPosY = y
-    let rad = 500
-    this.safeRotate = new Array
-    
-    for(let i = 0 ; i <= 3  ;i++){
-        angle += 90 * i
-        let xDeg = Math.sin(Math.PI / 180 * angle)
-        let yDeg = Math.cos(Math.PI / 180 * angle)
-        let degPosX = xDeg * rad * oneMeterDist 
-        let degPosY = yDeg * rad * oneMeterDist 
-        this["rotateLine" + i] = turf.lineString([[shipPosX,shipPosY],[shipPosX + degPosX,shipPosY +  degPosY]])
-        L.geoJSON(this["rotateLine" + i]).addTo(map)        
-    }    
-    
-    for(let i = 0 ; i <= 3  ;i++){
-        let fixAngle = 90 * i
-        let xDeg = Math.sin(Math.PI / 180 * fixAngle)
-        let yDeg = Math.cos(Math.PI / 180 * fixAngle)
-        let degPosX = xDeg * rad * oneMeterDist 
-        let degPosY = yDeg * rad * oneMeterDist 
-        this["fixLine" + i] = turf.lineString([[shipPosX,shipPosY],[shipPosX + degPosX,shipPosY +  degPosY]])
-        L.geoJSON(this["fixLine" + i]).addTo(map)
-    }
 }
 
 
+
+
+// ============================================================== Delete code below
 function checkCircle(circle, prov) {
     let check = turf.intersect(circle, this["provinsi" + prov])
     if (check !== null) {
