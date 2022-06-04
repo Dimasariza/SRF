@@ -16,6 +16,10 @@ const map = L.map('map', {
   map.options.minZoom = minZoom;
   map.options.maxZoom = maxZoom;
   map.doubleClickZoom.disable();
+
+  map.on('dblclick', function(e) {
+    console.log(e.latlng);
+  });
    
    // Add OSM - main Map
 const attr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -31,7 +35,7 @@ const googleSat = L.tileLayer("http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}
 googleSat.addTo(map);
 
   // Define map container - mini Map
-const miniMap = L.map('mini__map', {
+const miniMap = L.map('mini_map', {
   zoomControl:false}).setView([-7.202638784078749, 112.7179207686899], 15);
   miniMap.attributionControl.setPrefix(false);
   miniMap.options.maxZoom = maxZoom;
@@ -69,6 +73,16 @@ const miniShipIcon = L.icon({
 
 const anchorIcon = L.icon({
   iconUrl: "./src/img/anchorIcon.svg",
+  iconSize : [22,22],
+})
+
+const orgAnchor = L.icon({
+  iconUrl: "./src/img/OriginAnchor.svg",
+  iconSize : [30,30],
+})
+
+const destAnchor = L.icon({
+  iconUrl: "./src/img/DestAnchor.svg",
   iconSize : [30,30],
 })
 
@@ -78,7 +92,3 @@ let baseLayers = {
   "Google Map": googleSat,
 }
 L.control.layers(baseLayers).addTo(map);
-
-map.on('dblclick', function(e) {
-  console.log(e.latlng);
-});

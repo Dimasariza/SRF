@@ -1,3 +1,8 @@
+  /*
+  * Dimas Ariza
+  * source code link : 'https://github.com/Dimasariza/Tugas_Akhir'
+  */
+
 let lineStyle = {
     "color": "#ff7800",
     "weight": 1,
@@ -15,15 +20,74 @@ function wayPoint() {
     // this.fixWayLine = L.geoJSON(this.wayLine, {style : lineStyle}).addTo(map)
     this.newWayCoor = new Array
     
+
+
+
+
+    // ==============================================================================================================================
+    var increment = (function(lat, lng) {
+        return function() {
+    
+          let latDirection = (latOrg - latDest) / 100000
+          let lngDirection = (lngOrg - lngDest) / 100000
+    
+          lat -= latDirection
+          lng -= lngDirection
+    
+          this.mainShip.setLatLng([lat, lng])
+          this.miniShip.setLatLng([lat, lng])
+          miniMap.setView([lat,lng], 18,{
+            "animate": true,
+            "pan": {
+            "duration": frameRate
+            }
+          });
+  
+          miniCircle.setLatLng([lat, lng])
+          let miniShipCircle = turf.circle([lngOrg, latOrg], 0.1)
+          
+          // checkCircle(miniShipCircle)
+  
+          if ( gEl('shipInfo',0,0).classList.contains('active') === true ) {
+            let shipLat =gEl('shipLat', 0)
+            let shipLng =gEl('shipLng', 0)
+            shipLat.innerHTML = `Lat : ${lat.toFixed(6)}<br>`;
+            shipLng.innerHTML = `Lng : ${lng.toFixed(6)}` 
+          }  
+        }
+      } (portOrg.coor[0], portOrg.coor[1], portDest.coor[0], portDest.coor[1])); 
+      // shipVoyage = setInterval(increment, (frameRate * 1000))
+  
+  
+  this.mainShip = L.marker([portOrg.coor[0], portOrg.coor[1]], {icon: shipIcon}).addTo(map)
+  this.mainShip.bindPopup("Ship Name : MV.Toba Dreams <br> ID : Idn 001 <br> Flag : Indonesia")
+  L.DomUtil.addClass(this["mainShip"]._icon, 'main_ship');
+  
+  // let miniArea = L.geoJSON(miniShipCircle)
+  miniCircle = L.circle([portOrg.coor[0], portOrg.coor[1]], {radius : 100})
+  miniCircle.setStyle({className: 'shipArea'});
+  miniCircle.addTo(miniMap)
+  
+  this.miniShip = L.marker([portOrg.coor[0], portOrg.coor[1]], {icon: miniShipIcon}).addTo(miniMap)
+  this.miniShip.bindPopup("Ship Name : MV.Toba Dreams <br> ID : Idn 001 <br> Flag : Indonesia")
+  L.DomUtil.addClass(this["miniShip"]._icon, 'mini_ship');
+  
+  
+  let shipRot = turf.bearing([portOrg.coor[0], portOrg.coor[1]], [portDest.coor[0], portDest.coor[1]])
+  this.mainShip.setRotationAngle((shipRot));
+  this.miniShip.setRotationAngle((shipRot));
+  
+  // ======================================================================================================================================= 
+  
+
+
+
+
+
     checkLine(wayLine)
     if (intersectLine) {
         intersectCoor(this.wayLine)
     }
-}
-
-function switchCoor(lat, lan) {
-    let coord = [lan, lat]
-    return coord
 }
 
 function getLength (line){
@@ -89,8 +153,7 @@ function intersectCoor (line) {
                 let length = getLength(collectLine)
                 let maxPoint = checkMaxPpoint(length)
                 let latlon = getCoorPt(midPoint)
-                // generateCircle(...latlon)
-                let step = generatePoint(...latlon, intersectPoly)
+                let step = keyAngle(...latlon, intersectPoly)
                 for (let i = 1; i <= maxPoint ; i++){
                     let along = turf.along(collectLine , length/maxPoint * i);
                     let alongCoor = getCoorPt(along)
@@ -101,6 +164,9 @@ function intersectCoor (line) {
                         genLines(...alongCoor, intersectPoly,1)
                     }
                 }
+
+
+
                 // there is error in this lice code
                 // L.geoJSON(turf.lineString(newWayCoor)).addTo(map)
 
@@ -113,7 +179,7 @@ function intersectCoor (line) {
 
 let protect = 0
 let maxProtect = 30
-function generatePoint (lat, lon, poly){
+function keyAngle (lat, lon, poly){
     let rad = 1000
     let angle = this.angle
     let checkPoint;
@@ -191,8 +257,14 @@ function genLines(lat,lon,poly,id) {
         }
     } while(ptInPoly(checkPoint, poly))
     this["rotateLine" + 0] = turf.lineString([[lat,lon],nextpt])
+
     newWayCoor.push(nextpt)
-    L.geoJSON(this["rotateLine" + 0]).addTo(map)        
+
+    // let testcircle = turf.circle(nextpt)
+    // L.geoJso(testcircle).addTo(map)
+
+    L.geoJSON(this["rotateLine" + 0]).addTo(map)
+    // generateCircle(...newWayCoor)        
 }
 
 function generateCircle(lat, lon){
@@ -242,3 +314,39 @@ function checkCircle(circle, prov) {
         console.log("not intersect other poly", prov)
     }
 }
+
+
+/*
+var increment = (function(lat, lng) {
+    return function() {
+
+      let latDirection = (latOrg - latDest) / 100000
+      let lngDirection = (lngOrg - lngDest) / 100000
+
+      lat -= latDirection
+      lng -= lngDirection
+
+      this.mainShip.setLatLng([lat, lng])
+      this.miniShip.setLatLng([lat, lng])
+      miniMap.setView([lat,lng], 18,{
+        "animate": true,
+        "pan": {
+        "duration": frameRate
+        }
+      });
+
+      miniCircle.setLatLng([lat, lng])
+      let miniShipCircle = turf.circle([lngOrg, latOrg], 0.1)
+      
+      // checkCircle(miniShipCircle)
+
+      if ( gEl('shipInfo',0,0).classList.contains('active') === true ) {
+        let shipLat =gEl('shipLat', 0)
+        let shipLng =gEl('shipLng', 0)
+        shipLat.innerHTML = `Lat : ${lat.toFixed(6)}<br>`;
+        shipLng.innerHTML = `Lng : ${lng.toFixed(6)}` 
+      }  
+    }
+  } (latOrg, lngOrg, latDest, lngDest)); 
+  */
+  // shipVoyage = setInterval(increment, (frameRate * 1000))

@@ -173,3 +173,20 @@ Progress 26 Mei 2022
 1. masih ada bug di TPK pelawan dan PT IPC Terminal Peti Kemas (kesalahan pada saat mencari radius)
 2. ubah algoritma radius bertambah panjanga jika obsteclenya jauh
 3. masih ada bug pada saat mengenerate beberapa wayline di beberapa pelauhan, ada kesalahan pada newwaycoor
+
+
+// ===================
+class yang di pake
+1. fullscr
+2. dinamic info
+3. start_bar
+4. port_of_org
+5. port_of_dest
+6. list_org
+7. list_dest
+8. find_btn
+9. cancel_btn
+10. port_icon
+11. route_explore
+12. close
+13. active

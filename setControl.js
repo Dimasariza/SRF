@@ -1,147 +1,105 @@
-  // ===============================================Test function here
-document.addEventListener('keydown', function(event){
-  if(event.key === "Escape"){
-    event.preventDefault()
-    console.log('exit')
-	}
-  if(event.key === 'f') {
-    fullScrFun()
-  } 
-
-  if (event.key === 't') {
-    console.log('test')
-    console.log(
-      turf.booleanIntersects(line, point)
-  )
-
-  }
-  
-  if (event.key === 'q') {
-  
-    anchorOrg1.addEventListener('click', _markerOnClick);
-
-    var _markerOnClick = function(e) {
-      console.log(e)
+var fun = {
+  routeExp  : function () {
+    let check = el.cls(routeExplore, 'c', 'active')
+    let layerControl = el.get('leaflet-control-layers', 0)
+    if (!check) {
+      el.tran(startBar, 4.1, -5.35)
+      el.tran(portIcon, 4)
+      el.tran(layerControl, 4)
+      el.tran(routeExplore, 4)
+      el.cls(routeExplore, 'a', 'active')
     }
-
-
-    // test here
-    // console.log(featureCollection.features.length)
-
-  }
-});
-
-//  =========================== Start from here ===========================================================
-
-
-
-
-// Adding click event on route explore
-let portInfo = gEl('portInfo', 0)
-let routeExplore = gEl('routeExplore', 0)
-let startBar = gEl('start__bar', 0)
-let lc = gEl('leaflet-control-layers', 0)
-let expFun = function(){
-    if ( routeExplore.classList.contains('active') === false) {
-      startBar.style.transform = ("translate(4.1rem, -5.35rem)")
-      portInfo.style.transform = ("translate(4rem)") 
-      lc.style.transform = ("translate(4rem)")
-      routeExplore.style.transform = ("translate(4rem)")
-      gEl('routeExplore', 0, 'a')
-    } else if ( routeExplore.classList.contains('active') === true ) {
-      routeExplore.style.transform = ("translate(0)")
-      portInfo.style.transform = ("translate(0)") 
-      startBar.style.transform = ("translate(25rem , -5.35rem)")
-      lc.style.transform = ("translate(0)")
-      gEl('routeExplore', 0, 'rm')
+    if (check) {
+      el.tran(startBar, 25, -5.35)
+      el.tran(portIcon, 0)
+      el.tran(layerControl, 0)
+      el.tran(routeExplore, 0)
+      el.cls(routeExplore, 'r', 'active')
     }
-  } 
-routeExplore.addEventListener('click', expFun)
-for (let i = 0 ; i < gEl('close').length; i++ ) {
-  gEl('close', i).addEventListener('click', expFun )
-}
-
-  // Adding click event on route Info
-let infoFun = () => {
-  if ( portInfo.classList.contains("active") === false) {
-      gEl('portInfo', 0, 'a', "close")
-      getPortData('show')
-    } else {
-      gEl('portInfo', 0, 'rm', "anchor")
-      getPortData('hide')
+  },
+  portIcon  : function () {
+    let check = el.cls(portIcon, 'c', 'active')
+    if (!check) {
+      el.cls(portIcon, 'a', 'active')
+      el.txt(portIcon, 'close', 0)
+      portData('show')
+    }
+    if (check) {
+      el.cls(portIcon, 'r', 'active')
+      el.txt(portIcon, 'anchor', 0)
+      portData('hide')
+    }
+  },
+  fullScr : function () {
+    let check = el.cls(fullScr, 'c', 'active')
+    if (!check) {
+      el.cls(fullScr, 'a', 'active')
+      el.txt(fullScr, 'fullscreen_exit', 0)
+      el.get('mini_map', 0).requestFullscreen()
+    }
+    if (check) {
+      el.txt(fullScr, 'fullscreen_exit', 0)
+      el.cls(fullScr, 'r', 'active')
+      document.exitFullscreen()
+    }
+  },
+  findBtn : function () {
+    for (let i = 0; i < portBtn.length; i++) {
+      el.cls(portBtn[i], 'a', 'disabled')
+      mod.attr(cancelBtn, 'r', 'disabled')
+      el.txt(findBtn, 'Voyage')
+    }
+    el.cls(findBtn, 'a', 'voyage')
+    findBtn.classList.add('voyage')
+    wayPoint()
+  },
+  expInfo : function () {
+    let check = el.cls(expInfo, 'c', 'active')
+    if (!check) {
+      el.cls(expInfo, 'a', 'active')
+      el.txt(expInfo, 'keyboard_arrow_down')
+      addDiv("a")
+    }
+    if (check) {
+      el.cls(expInfo, 'r', 'active')
+      el.txt(expInfo, 'keyboard_arrow_up')
+      addDiv("r")
+    }
+  },
+  cancelBtn: function () {
+    for (let i = 0; i < portBtn.length; i++) {
+      // portBtn[item].classList.remove('disabled')
+      el.cls(portBtn[i], 'r', 'disabled')
+      el.txt(findBtn, 'Find')
+      // map.removeLayer(mainShip)
+      // miniMap.removeLayer(miniShip)
+      // map.removeLayer(fixWayLine)
+      // miniMap.removeLayer(miniCircle)
+      // clearInterval(shipVoyage)
+    }
+  },
+  portIcon  : function () {
+    let check = map.hasLayer(portMarker0)
+    for (let item in portIdx){
+      let marker = eval('portMarker' + item)
+      if (!check){
+        el.txt(portIcon, 'close', 0)
+        marker.addTo(map)
+        L.DomUtil.addClass(marker._icon, 'anchor_active')
+      }
+      if (check) {
+        el.txt(portIcon, 'anchor', 0)
+        map.removeLayer( marker )
+      }
+    }
   }
 }
-portInfo.addEventListener("click", infoFun, false)
 
-  // Adding click event on fullscreen button
-let fscr = gEl('fullScr', 0)
-let fullScrFun = function() {
-  if ( fscr.classList.contains('active') === false ) {
-    gEl('fullScr', 0 , 'a', 'fullscreen_exit')
-    gEl('mini__map', 0).requestFullscreen()
-  } else if ( fscr.classList.contains('active') === true ) {
-    document.exitFullscreen()
-    gEl('fullScr',0, 'rm', 'fullscreen')
-  }
-}
-fscr.addEventListener("click", fullScrFun)
-
-  //  set routing button
-let findBtn = gEl('findBtn', 0)
-let portBtn = gEl('portBtn')
-let cancelBtn = gEl('cancelBtn', 0)
-function setFindBtn() {
-  for ( let i = 0 ; i < portBtn.length ; i++) {
-    portBtn[i].classList.add('disabled')
-    cancelBtn.removeAttribute('disabled')
-    findBtn.textContent = 'Voyage'
-  }
-  findBtn.classList.add('voyage')
-  wayPoint()
-}
-findBtn.addEventListener('click', setFindBtn)
-
-function setCancelBtn () {
-  for ( let i = 0 ; i < portBtn.length ; i++) {
-    portBtn[i].classList.remove('disabled')
-    findBtn.textContent = 'Find'
-    // map.removeLayer(mainShip)
-    // miniMap.removeLayer(miniShip)
-    // map.removeLayer(fixWayLine)
-    // miniMap.removeLayer(miniCircle)
-    // clearInterval(shipVoyage)
-  }
-
-  if ( anchorOrg_1.length == 0 && anchorOrg_2.length !== 0 ) {
-    map.removeLayer(anchorOrg2)
-  } else if ( anchorOrg_1.length !== 0 && anchorOrg_2.length == 0) {
-    map.removeLayer(anchorOrg1)
-  }
-
-  if ( anchorDest_1.length == 0 && anchorDest_2.length != 0 ) {
-      map.removeLayer(anchorDest2)
-  } else if (anchorDest_1.length !=0 && anchorDest_2.length == 0) {
-    map.removeLayer(anchorDest1)
-  }
-
-
-}
-cancelBtn.addEventListener('click', setCancelBtn )
-
-let expInfo = gEl('expand_more',0)
-let shipInfo = gEl("dinamicInfo", 0)
-function expInfoFun(){
-  if( expInfo.classList.contains('active') === false) {
-    expInfo.classList.add('active')
-    expInfo.textContent = 'keyboard_arrow_down'
-    addDiv("a")
-  } else if ( expInfo.classList.contains('active') === true) {
-    expInfo.textContent = 'keyboard_arrow_up'
-    expInfo.classList.remove('active')
-    addDiv("r")
-  }
-}
-expInfo.addEventListener('click', expInfoFun)
-
-
-
+el.click(routeExplore, fun.routeExp)
+el.click(closeBtn, fun.routeExp)
+el.click(portIcon, fun.portIcon)
+el.click(fullScr, fun.fullScr)
+el.click(findBtn, fun.findBtn)
+el.click(expInfo, fun.expInfo)
+el.click(cancelBtn, fun.cancelBtn)
+el.click(portIcon, fun.portIcon)

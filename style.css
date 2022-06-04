@@ -34,7 +34,7 @@ h5 {
   justify-content: space-between;
 }
 
-.mini__map {
+.mini_map {
   grid-area: mini-map;
   z-index: 9999;
   height: 33vh;
@@ -48,7 +48,7 @@ h5 {
   box-shadow: var(--shadow);
 }
 
-.dinamicInfo {
+.dinamic_info {
   background-color: var(--dark-color);
   border: 1px solid white;
   border-radius: 0.5rem;
@@ -61,12 +61,12 @@ h5 {
   text-decoration: none;
 }
 
-.titleInfo {
+.title_info {
   display: flex;
   justify-content: space-between;
 }
 
-.titleInfo > button  {
+.title_info > button  {
   background: none;
   border: none;
 }
@@ -80,7 +80,7 @@ h5 {
   transition: var(--transition);
 }
 
-.fullScr {
+.full_scr {
   margin: .5rem;
   border-radius: .4rem;
   border: none;
@@ -93,13 +93,13 @@ h5 {
   z-index: 9999;
 }
 
-.fullScr:hover {
+.full_scr:hover {
   opacity: 1;
   transform: scale(1.1);
 }
 
 /* Search rute bar */
-.start {
+.start__side {
   z-index: 9997;
   margin: 5.5rem 0.7rem;
   display: flex;
@@ -109,13 +109,15 @@ h5 {
   justify-self: end;
 }
 
-.start__bar {
+.icon {
+  color: rgb(177, 172, 166)
+}
+
+.start_bar {
   border: 1px solid white;
   width: 15rem;
   height:99vh;
   background-color: var(--dark-color);
-  /* align-self: flex-start; */
-  /* justify-self: end; */
   border-radius: 0.5rem;
   padding: 1rem;
   margin-right: 0.5rem;
@@ -124,7 +126,7 @@ h5 {
   transform: translate(20rem , -5.35rem);
 }
 
-.start__btn {
+.start_btn {
   display: flex;
   flex-direction: column;
 }
@@ -135,7 +137,7 @@ h5 {
   align-items: center;
 }
 
-.routeExplore {
+.route_explore {
   height: 3rem;
   width: 3rem;
   border-radius: 5px;
@@ -144,7 +146,7 @@ h5 {
   border-color: var(--dark-color);
 }
 
-.portInfo {
+.port_icon {
   margin-top: 2rem;
   height: 3rem;
   width: 3rem;

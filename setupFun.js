@@ -77,7 +77,7 @@ function addChd(c, txt, d, set, i) {
 
     //  Function to append div element
 function addDiv (conds){
-    let divParr = gEl('dinamicInfo', 0)
+    let divParr = gEl('dinamic_info', 0)
     let div1 = document.createElement('div')
     let div2 = document.createElement('div')
     let div3 = document.createElement('div')
@@ -127,7 +127,7 @@ function addDiv (conds){
         addA.target = "_blank"
     } 
     if ( conds == "r") {
-        let child = divParr.lastElementChild; 
+        let child = divParr.lastElementChild;    
         for (let i = 0 ; i < divParr.children.length ; i++) {
             divParr.removeChild(child);
         }
