@@ -4,18 +4,30 @@ if(event.key === "Escape"){
     }
 
 if(event.key === 'f') {
-    fullScrFun()
+    fun.fullScr()
 } 
 
-if (event.key === 't') {
-
+if (event.key === 'r') {
+    fun.routeExp()
     // call function here
 
 }
 
 if (event.key === 'q') {
 
+    let testsector = L.circle([0, 100], {
+        color: 'red',
+        radius: 1000,
+        weight: 1
+      })
+      .setSector(  0,  90)
+      .addTo(map);
+    //   testsector.setAngles(0,90)
     // call function here
 
+}
+
+if (event.key === 'p'){
+    fun.portIcon()
 }
 });

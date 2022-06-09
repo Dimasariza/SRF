@@ -43,7 +43,6 @@ function popUp(f,l){
   }
 }
 
-let mergeArea = new Array
 async function indonesianData () {
   for ( let i = provStart ; i <= provinceNum ; i++) {
     let urlProvData = `./src/data/indonesia/${i}.geojson`
@@ -56,21 +55,28 @@ async function indonesianData () {
     popUp(featureData, provinces)
     segmentArea.addLayer(provinces)
     provName.push(featureData.properties.Provinsi)
-    // merge(featureData, area)
     i == provinceNum ? console.log("ready") : console.log("wait")
   }
-  function merge(prov, area) {
-    if (this[area] === undefined) {
-      this[area] = prov
-      mergeArea.push(area)
-    } else if ( this[area]) {
-      this[area] = turf.union(this[area], prov)
-    }
-  }
 }
-// indonesianData()
-portData()
+  // ============================================= Get Obstacle Data ============================================= //
 
+let obsnum = 6
+let obsList = new Array
+async function obstacleData () {
+  for(let i = 1 ; i <= obsnum ; i++){
+    const urlPortData = `./src/data/obstacle/${'obs'+i}.geojson`
+    const response = await fetch(urlPortData);
+    const data = await response.json()
+    data.features.forEach(item => {
+      this['obs' + i] = item
+      obsList.push(this['obs' + i])
+    i == obsnum ? console.log("ready") : console.log("wait")
+
+    });
+  }
+  // indonesianData()
+}
+obstacleData()
 
   // ============================================= Get Ports Data ============================================= //
 let portIdx = new Array
@@ -98,18 +104,19 @@ const response = await fetch(urlPortData);
 const data = await response.json()
     for (let item in data) {
       let dataInfo = data[item]
-      let {LatLng, Pelabuhan, ID} = dataInfo
+      let {LatLng, Pelabuhan, ID, sandar} = dataInfo
       addPortList(listOrg, `${Pelabuhan}`)
       el.cls(listOrg.children[item], 'a', 'origin_port')
       let li = el.get('origin_port', item)
       mod.attr(li, 's', 'onclick', `passOrg(${item})`)
-      this["portMarker" + item ] = L.marker(LatLng, {icon:  anchorIcon})
+      this["portMarker" + item ] = L.marker(sandar, {icon:  anchorIcon})
       this["portMarker" + item ].bindPopup(`Nama Pelabuhan : ${Pelabuhan} <br> Id Pelabuhan : ${ID}`)
       this['port' + ID] = dataInfo
       portIdx.push(ID)
     }
     addPortList(listDest, 'Please input port of origin', "d")
 }
+portData()
 
 function  passOrg(i) {
   let childLen = listDest.childElementCount
@@ -161,6 +168,10 @@ function  passOrg(i) {
       map.removeLayer(lastMarker)
     } 
   }
+  
+  let portCoor = eval('port' + portIdx[i]).sandar
+  portCoor = switchCoor(...portCoor)
+  wayCoor[0] = portCoor
   portNum[0] = i
 }
 
@@ -193,6 +204,12 @@ function  passDest(i) {
     el.cls(lastDest.firstChild, 'r', 'disabled')
     mod.attr(lastDest, 's', 'onclick', `passDest(${portNum[1]})`)
   }
+  mod.attr(findBtn, 'r', 'disabled')
+  mod.attr(closeBtn, 'r', 'disabled')
+
+  let portCoor = eval('port' + portIdx[i]).sandar
+  portCoor = switchCoor(...portCoor)
+  wayCoor[1] = portCoor
   portNum[1] = i
 }
 
@@ -204,4 +221,11 @@ function changePort(id){
   let destination = el.get('dest_port', id)
   el.cls(destination.firstChild, 'a', 'disabled')
   mod.attr(destination, 'r', 'onclick')
+}
+
+function switchCoor(lon, lat){
+  let latLon = new Array
+  latLon[0] = lat
+  latLon[1] = lon
+  return latLon
 }

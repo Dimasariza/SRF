@@ -41,20 +41,20 @@ const miniMap = L.map('mini_map', {
   miniMap.options.maxZoom = maxZoom;
   miniMap.options.minZoom = minZoom;
   
-  // Add OSM - mini map
+  // Add Vector Tile Selection map - mini map
 const miniAttr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 const miniTileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const miniTilesMap = L.tileLayer(miniTileUrl, {miniAttr});
+const miniTilesMap = L.tileLayer(miniTileUrl);
     miniTilesMap.addTo(miniMap);
 
 // Give limits in Indonesia area
 map.on('mousemove', function(e){
   let lat = e.latlng.lat,
-  lng = e.latlng.lng
-  // console.log(lat, lng)
-  // if (lng < 90 || lng > 150 || lat > 10 || lat < -13 ) {
+  lon = e.latlng.lng
+  // console.log(lat, lon)
+  // if (lon < 90 || lon > 150 || lat > 10 || lat < -13 ) {
   //   map.dragging.disable();
-  // } else if(lng >= 90 || lng <= 150 || lat <= 10 || lat >= -13 ){
+  // } else if(lon >= 90 || lon <= 150 || lat <= 10 || lat >= -13 ){
   //   map.dragging.enable();
   // }
 });
@@ -67,12 +67,12 @@ const shipIcon = L.icon({
 
 const miniShipIcon = L.icon({
   iconUrl: "./src/img/myship.svg",
-  iconSize : [50,50],
-  iconAnchor : [30, 24],
+  iconSize : [40,40],
+  iconAnchor : [22, 22],
 });
 
 const anchorIcon = L.icon({
-  iconUrl: "./src/img/anchorIcon.svg",
+  iconUrl: "./src/img/dot.svg",
   iconSize : [22,22],
 })
 

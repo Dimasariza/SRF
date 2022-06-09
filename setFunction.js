@@ -4,8 +4,8 @@
  */
 var t = 
 {
-    lines   : function(lat, lon){
-        let line    = turf.lineString(lat, lon)
+    lines   : function(coor){
+        let line    = turf.lineString(coor)
         return line
     },
     ptpoly  : function (pt, poly){
@@ -16,7 +16,7 @@ var t =
         let split   = turf.lineSplit(line, poly)
         return split
     },
-    pt      : function (pt){
+    ptCoor  : function (pt){
         let coord   = turf.getCoord(pt)
         return coord
     },
@@ -28,12 +28,12 @@ var t =
         let conds   = turf.booleanIntersects(line, poly)
         return conds
     },
-    midpt   : function(line){
-        let mid     = turf.midpoint(line)
+    midpt   : function(coorX, coorY){
+        let mid     = turf.midpoint(coorX, coorY)
         return mid
     },
-    along   : function(line){
-        let along   = turf.along(line)
+    along   : function(line, step){
+        let along   = turf.along(line, step)
         return along
     },
     int     : function(poly, poly){
@@ -44,9 +44,17 @@ var t =
         let dist    = turf.pointToLineDistance(pt, line)
         return dist
     },
-    ang     : function(latx, lonx, laty, lony){
-        let angle   = turf.bearing([latx,lonx],[laty, lony])
+    ang     : function(coorX, coorY){
+        let angle   = turf.bearing(coorX,coorY)
         return angle
+    },
+    dist    : function(pt1, pt2){
+        let dist = turf.distance(pt1, pt2)
+        return dist
+    },
+    pt      : function(lat, lon){
+        let point = turf.point([lat, lon])
+        return point
     }
 }
 
