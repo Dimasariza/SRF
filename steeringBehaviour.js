@@ -1,7 +1,7 @@
 function passWayCoor(){
-  let count = 2
-  let currPos = newWayCoor[count - 1]
-  let nextPos = newWayCoor[count]
+  let count = 1
+  let currPos = wayCoor[count - 1]
+  let nextPos = wayCoor[count]
   
   function setShipPos(currLat, currLon){
     miniCircle = L.circle([currLon, currLat], {radius : 100})
@@ -24,7 +24,7 @@ function passWayCoor(){
     .setAngles( 0, 0)
     .addTo(miniMap);
   }
-  setShipPos(...newWayCoor[0])
+  setShipPos(...wayCoor[0])
   ship(...currPos, ...nextPos)
   
   function ship(currLat, currLon, nextLat, nextLon){
@@ -64,13 +64,18 @@ function passWayCoor(){
 
             getDist = t.dist(t.pt(lat, lon) , t.pt(nextLat, nextLon))
 
+
+            setInformation(lat, lon)
+
             console.log(getDist)
             if(getDist < 0.01){
               clearInterval(shipVoyage)
-              count++
+              if(count <= wayCoor.length){
+                count++
+              }
               console.log(count)
-              currPos = newWayCoor[count - 1]
-              nextPos = newWayCoor[count]
+              currPos = wayCoor[count - 1]
+              nextPos = wayCoor[count]
               ship(...currPos, ...nextPos)
             }
           }
@@ -80,6 +85,10 @@ function passWayCoor(){
   }
 }
 
+
+function setInformation(lat, lon){
+
+}
 
 
 var steer = {

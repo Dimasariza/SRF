@@ -57,8 +57,8 @@ var fun = {
       fun.routeExp()
     }
     if(!voyage){
-      el.txt(findBtn, 'Voyage')
       wayPoint(wayCoor)
+      el.txt(findBtn, 'Voyage')
     }
   },
   expInfo : function () {
@@ -84,7 +84,6 @@ var fun = {
       el.cls(portBtn[i], 'r', 'disabled')
       el.cls(cancelBtn, 'a', 'disabled')
       el.txt(findBtn, 'Find')
-      newWayCoor = []
       wayCoor = []
       pointAlong = []
     }
@@ -123,6 +122,14 @@ el.click(cancelBtn, fun.cancelBtn)
 el.click(portIcon, fun.portIcon)
 
 
+function increase(){
+  this.testTime = 
+  setInterval(function() {
+    count++
+    
+    console.log(count);
+}, 1000);
+}
 
 // modified this code below
     //  Function to append div element
