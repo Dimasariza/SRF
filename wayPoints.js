@@ -8,110 +8,131 @@ let lineStyle = {
     "weight": 1,
     "opacity": 0.65
 };
+wayCoor = new Array
+let maxProtect = 800
 
-this.wayCoor = new Array
-let maxProtect = 80
-count = 1
-
-function wayPoint(coordinates) {
-    for (let i = 1; i < coordinates.length ; i++){
+function wayPoint(coord) {
+    for (let i = 1; i < coord.length ; i++){
+        // loading(i)
         this.lineIndex = i
-        this.angle = t.ang(coordinates[i - 1],coordinates[i])
-        this.lineString = turf.lineString([coordinates[i - 1], coordinates[i]], {name: 'way line'});    
-        checkLine(lineString)
-        if (intersectLine.length != 0) {
-            intersectCoor(this.lineString)
-            wayPoint(wayCoor)
-        }    
-        if (intersectLine.length == 0){
-            i == wayCoor.length - 1 ? console.log('Done') : console.log('wait')
-            continue
-        } 
-
-        if(wayCoor.length - 1){
-            wayLine()
-        }
-        
-        if(i == maxProtect) break     
+        this.angle = t.ang(coord[i - 1],coord[i])
+        this.lines = t.lines([coord[i - 1], coord[i]]);    
+        let check = checkLine(lines)
+        i < wayCoor.length ? console.log('wait', i) : console.log('done', i)
+        if(check){
+            intersectCoor(this.lines)
+        } else if (!check) continue
+        if(i == maxProtect) break
     }
+    let line = t.lines(wayCoor)
+    let check = checkLine(line)
+    if(check){
+        console.log('recheck line')
+        wayPoint(wayCoor)
+    } 
+    let checkLines = map.hasLayer(this.wayLine)
+    this.wayPointsLayer = new L.FeatureGroup();
+    if(!checkLines){
+        this.wayLine = L.geoJSON(line).addTo(map)
+        el.cls(findBtn, 'a', 'voyage')
+        wayCoor.forEach(item => {
+            let pointMarker = generateCircle(...item)
+            wayPointsLayer.addLayer(pointMarker)
+            wayPointsLayer.addTo(map)
+        })
+    }
+    // el.get('loader', 0).style.visibility = 'hidden'
 }
 
-function wayLine(){
-    let line = turf.lineString(wayCoor)
-    this.wayLine = L.geoJson(line).addTo(map)
+function checkWayPoint(coord){
+    for (let i = 1; i < coord.length ; i++){
+        this.lineIndex = i
+        this.angle = t.ang(coord[i - 1],coord[i])
+        this.lines = t.lines([coord[i - 1], coord[i]]);    
+        let check = checkLine(lines)
+        i < wayCoor.length - 1 ? console.log('wait', i) : console.log('done', i)
+        if (!check){
+            continue
+        } else if (check) {
+            intersectCoor(this.lines)
+        }
+        if(i == maxProtect) break
+    }
 }
 
 function checkLine(line) {
     this.intersectLine = new Array
-    for (let item in obsList) {
-        let check = t.bint(line, obsList[item])
+    obsList.forEach(obstacle => {
+        let check = t.bint(line, obstacle)
         if ( check ) {
-        this.intersectLine.push(obsList[item])
+        this.intersectLine.push(obstacle)
         }
-    }
+    });
+    if(this.intersectLine.length != 0)return true
+    else return false
 }
 
 function intersectCoor (line) {
-    for ( let item in intersectLine) {
-        let intersectPoly = intersectLine[item]
-        let lineSplit = t.split(line, intersectPoly)
-        returnLine = returnIdx(lineSplit) 
-        for(let lines in returnLine) {
-            let collectLine = returnLine[lines]
+    // let useLength = 0
+    let usePoint
+    this.intersectLine.map(obs => {
+        let lineSplit = t.split(line, obs)
+        returnLine = returnIdx(lineSplit)
+        for(let item in returnLine) {
+            let collectLine = returnLine[item]
             let lineCoor = collectLine.geometry.coordinates
             let midPoint = t.midpt(...lineCoor)
-            let pointInPoly = t.ptpoly(midPoint, intersectPoly)
+            let pointInPoly = t.ptpoly(midPoint, obs)
             if(pointInPoly){
-                midPointInPoly(midPoint, collectLine, intersectPoly)
-                break;
+                usePoint = midPointInPoly(midPoint, collectLine, obs)
+                break
+                // let {nextpt, length} = data
+                // if (length > useLength){
+                //     useLength = length
+                //     usePoint = nextpt
+                //     return [nextpt]
+                // }
             }
         }
-    }
+    })
+    wayCoor.splice(lineIndex, 0, usePoint)
 }
 
 function midPointInPoly(midPoint, lines, poly){
     let lineLength = t.len(lines)
     maxPoint = checkMaxPoint(lineLength)
-    distance = distFromObs(maxPoint)
-
+    distance =  distFromObs(maxPoint)
     let latlon = t.ptCoor(midPoint)
     let step = keyAngle(...latlon, this.angle, poly)
-
-    let length = 0
-    let nextpt
-
+    let usePoint
+    let useLength = 0
     for (let i = 1; i < maxPoint ; i++){
         let along = t.along(lines , lineLength/maxPoint * i);
         let alongPt = t.ptCoor(along)
+        let id
         if (step){
-            lineData = genLines(...alongPt, poly , 3, distance)
+            id = 3
         } else if (!step) {
-            lineData = genLines(...alongPt, poly , 1, distance)
+            id = 1
         }
-
-        if(lineData[0] > length){
-            length = lineData[0]
-            nextpt = lineData[1]
+        data = genLines(...alongPt, poly , id, distance)
+        let {nextpt, length} = data
+        if (length > useLength){
+            useLength = length
+            usePoint = nextpt
         }
-
-        if(i === maxPoint - 1){
-            wayCoor.splice(lineIndex, 0, nextpt)
-            
-            // Test here
-            // this["safeLine" + 0] = turf.lineString([alongPt,nextpt])
-            // L.geoJSON(this["safeLine" + 0]).addTo(map)
-            generateCircle(...nextpt)
-            // end test
-
-            el.cls(findBtn, 'a', 'voyage')
+        let check = t.ptpoly(usePoint, poly)
+        if(check){
+            data = genLines(...usePoint, poly, id, 100)
+            usePoint = data.nextpt
+            console.log('inside obstacle')
         }
     }
+    return usePoint
 }
 
 function keyAngle (lat, lon, angle, poly){
     let rad = 500
-    let checkPoint;
-    let nextpt
     let step = true
     let protect = 0
     do {
@@ -125,12 +146,32 @@ function keyAngle (lat, lon, angle, poly){
             checkPoint = t.pt(...nextpt)
             step = true
         }
-        protect += 1
-        if ( protect == maxProtect) {
-            break;
-        }    
+        protect++
+        if (protect == maxProtect) break;
     } while (t.ptpoly(checkPoint, poly))
     return step
+}
+
+function genLines(lat, lon, poly, id, distance) {
+    let rad = 100
+    let angle = this.angle + 90 * id
+    let protect = 0
+    do{
+        rad += 100
+        nextpt = nearestPoint(rad, angle, lat, lon)
+        checkPoint = t.pt(...nextpt)
+        check = t.ptpoly(checkPoint, poly)
+        if(!check){
+            nextpt = nearestPoint(distance, angle, ...nextpt)
+        }
+        protect++
+        if(protect == maxProtect){
+            nextpt = nearestPoint(distance, angle, ...nextpt)
+            break;
+        }
+    } while(check)
+    let length = t.dist([lat, lon], nextpt)
+    return { nextpt : nextpt, length : length}
 }
 
 function nearestPoint(rad, angle, lat, lon) {
@@ -141,34 +182,6 @@ function nearestPoint(rad, angle, lat, lon) {
     let degLon = lonDeg * rad * oneMeterDist
     let nextpt =  [lat + degLat,lon +  degLon]
     return nextpt
-}
-
-function genLines(lat, lon, poly, id, distance) {
-    let check
-    let rad = 500
-    let angle = this.angle + 90 * id
-    let nextpt
-    let checkPoint
-    let protect = 0
-    do{
-        rad += 500
-        nextpt = nearestPoint(rad, angle, lat, lon)
-        checkPoint = t.pt(...nextpt)
-        protect += 1
-        check = t.ptpoly(checkPoint, poly)
-
-        if(!check){
-            nextpt = nearestPoint(distance, angle, ...nextpt)
-        }
-
-        if(protect == maxProtect){
-            nextpt = nearestPoint(distance, angle, ...nextpt)
-            console.log('break')
-            break;
-        }
-    } while(check)
-    let length = turf.distance([lat, lon], nextpt)
-    return [length, nextpt]
 }
 
 function distFromObs(maxPoint){
@@ -242,6 +255,13 @@ function returnIdx(split){
 }
 
 function generateCircle(lat, lon){    
-    this.currentCircle = L.circle([lon, lat], {radius : 100}).addTo(map)
-    this.currentCircle.setStyle(provStyle);
+    let circle = L.circle([lon, lat], {radius : 100})
+    circle.setStyle(provStyle);
+    return circle
 }
+
+function generateLines(coor1, coor2){
+    this["safeLine" + 0] = t.lines([coor1,coor2])
+    L.geoJSON(this["safeLine" + 0]).addTo(map)
+}
+

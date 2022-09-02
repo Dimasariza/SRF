@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,900italic,900,700italic,700,500italic,500,400italic,300italic,300,100italic,100);
+
 * {
   padding: 0;
   margin: 0;
@@ -29,14 +31,14 @@ h5 {
   flex-direction: column;
   width: 28rem;
   height: 100vh;
-  z-index: 9999;
+  z-index: 9995;
   padding: 0.5rem;
   justify-content: space-between;
 }
 
 .mini_map {
   grid-area: mini-map;
-  z-index: 9999;
+  z-index: 9996;
   height: 33vh;
   color: white;
   border-radius: 0.5rem;
@@ -46,6 +48,7 @@ h5 {
   border: 1px solid var(--dark-color);
   background-color: red;
   box-shadow: var(--shadow);
+  visibility: hidden;
 }
 
 .dinamic_info {
@@ -90,7 +93,7 @@ h5 {
   opacity: 0.7;
   background-color: white;
   transition: var(--transition);
-  z-index: 9999;
+  z-index: 9998;
 }
 
 .full_scr:hover {
@@ -171,6 +174,55 @@ h5 {
   animation-iteration-count: infinite;
 }
 
+#loader {
+  width: 100%;
+  height: 100vh;
+  z-index: 9999;
+  background-color: var(--dark-color);
+  position: absolute;
+  opacity: 0.6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+}
+
+.loading{
+  text-align: center;
+  position: relative;
+  width: 200px;
+}
+
+.loading h1.abs{
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.loading .color {
+  width: 0px;
+  overflow: hidden;
+  color: #f60d54 ;
+}
+
+.loading p{
+  font-size: 40px;
+  font-weight: 100;
+  color: #f60d54;
+}
+
+.loading h1{
+  color: white;
+  font-size: 60px;
+  margin-top: -10px;
+}
+
+.loading hr {
+  background: #f60d54;
+  border: none;
+  height: 1px;
+}
+
 @keyframes anchor {
   0%   {top:0px;}
   25%  {top:2px;}
@@ -192,3 +244,5 @@ h5 {
   90%    {opacity: 0.1;}
   100%   {opacity: 0.05;}
 }
+
+

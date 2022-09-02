@@ -72,7 +72,7 @@ const miniShipIcon = L.icon({
 });
 
 const anchorIcon = L.icon({
-  iconUrl: "./src/img/dot.svg",
+  iconUrl: "./src/img/anchor.svg",
   iconSize : [22,22],
 })
 

@@ -23,6 +23,13 @@
 <body>
   <div class="map" id="map" >
     <!-- Left side ship information (mini map, dinamic information) -->
+    <div id="loader" class="loader">
+      <div class="loading">
+        <p>Loading</p>
+        <h1>0%</h1>
+        <hr>
+      </div>
+    </div>
     <div class="ship__information">
       <div class="mini_map" id="mini_map">
         <button class="full_scr">
@@ -98,8 +105,6 @@
   <script src="getData.js"></script>
   <script src="initMap.js"></script>
   <script src="wayPoints.js"></script>
-  <!-- <script src="wayPoint.js"></script> -->
-  <!-- <script src="astar.js" ></script> -->
   <script src="steeringBehaviour.js"></script>
   <script src="setControl.js" ></script>
   <script src="keyFun.js"></script>

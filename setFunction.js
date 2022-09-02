@@ -48,8 +48,8 @@ var t =
         let angle   = turf.bearing(coorX,coorY)
         return angle
     },
-    dist    : function(pt1, pt2){
-        let dist = turf.distance(pt1, pt2)
+    dist    : function(coorX, coorY){
+        let dist = turf.distance(coorX, coorY)
         return dist
     },
     pt      : function(lat, lon){
@@ -138,6 +138,21 @@ var mod = {
     }
 }
 
+
+/* ======================================================================
+ * Function loading
+ * ======================================================================
+ */
+function loading(indicator){
+    $(document).ready(function(){
+        $(".loader").css("visibility", "visible");
+        $(".loader .loading h1").html(indicator + "%");
+        $(".loader .loading hr").css("width", indicator + "%");
+        $(".loading-page .counter").css("background", "linear-gradient(to right, #f60d54 "+ indicator + "%,#0d0d0d "+ indicator + "%)");
+        $(".loading-page .counter h1.color").css("width", indicator + "%");
+    });
+}
+
 /* ======================================================================
  * Initialize variable
  * ======================================================================
@@ -156,3 +171,4 @@ let closeBtn     = el.get('close_btn', 0)
 let dinamicInfo  = el.get('dinamic_info', 0)
 let expInfo      = el.get('expand_info', 0)
 let portBtn      = el.get('port_btn')
+

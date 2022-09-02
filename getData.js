@@ -69,12 +69,20 @@ async function obstacleData () {
     const data = await response.json()
     data.features.forEach(item => {
       this['obs' + i] = item
+      L.geoJSON(item) 
+      .setStyle(provStyle)
+      // let (eval('segment' + i)) = this['obs' + i] 
+      // segmentArea.addLayer(eval(segment + i))
       obsList.push(this['obs' + i])
-    i == obsnum ? console.log("ready") : console.log("wait")
-
+      if (i == obsnum){
+        el.get('loader', 0).style.visibility = 'hidden'
+        console.log('wait')
+      } else {
+        loading(i * 20)
+      }
     });
   }
-  // indonesianData()
+  indonesianData()
 }
 obstacleData()
 

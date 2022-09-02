@@ -54,10 +54,12 @@ var fun = {
     let voyage = el.cls(findBtn, 'c', 'voyage')
     if(voyage){
       passWayCoor()
-      fun.routeExp()
     }
     if(!voyage){
-      wayPoint(wayCoor)
+      fun.routeExp()
+      setTimeout(() => {
+        wayPoint(wayCoor)
+      }, 2000);
       el.txt(findBtn, 'Voyage')
     }
   },
@@ -84,16 +86,22 @@ var fun = {
       el.cls(portBtn[i], 'r', 'disabled')
       el.cls(cancelBtn, 'a', 'disabled')
       el.txt(findBtn, 'Find')
-      wayCoor = []
-      pointAlong = []
     }
-    let check = map.hasLayer(mainShip)
-    if(check){
+    wayCoor = []
+    pointAlong = []
+    count = 1
+    let checkLine = map.hasLayer(wayLine)
+    if(checkLine){
+      map.removeLayer(wayPointsLayer)
+      map.removeLayer(wayLine)
+    }
+    let checkShip = map.hasLayer(this.mainShip)
+    if(checkShip){
       map.removeLayer(mainShip)
       miniMap.removeLayer(miniShip)
       miniMap.removeLayer(miniCircle)
+      clearInterval(shipVoyage)
     }
-    clearInterval(shipVoyage)
   },
   portIcon  : function () {
     let check = map.hasLayer(portMarker0)
@@ -121,15 +129,6 @@ el.click(expInfo, fun.expInfo)
 el.click(cancelBtn, fun.cancelBtn)
 el.click(portIcon, fun.portIcon)
 
-
-function increase(){
-  this.testTime = 
-  setInterval(function() {
-    count++
-    
-    console.log(count);
-}, 1000);
-}
 
 // modified this code below
     //  Function to append div element
@@ -176,9 +175,9 @@ function addDiv (conds){
 
       el.cls(div1, 'a', 'dinamic_content')
       el.cls(div1, 'a', 'text-light')
-      el.cls(div2, 'a', 'latLan')
-      el.cls(div2, 'a', 'shipLat')
-      el.cls(div2, 'a', 'shipLng')
+      el.cls(div2, 'a', 'latLon')
+      el.cls(spanLat, 'a', 'shipLat')
+      el.cls(spanLng, 'a', 'shipLon')
       el.cls(div2, 'a', 'status')
 
       addA.href = 'https://github.com/Dimasariza/Tugas_Akhir'

@@ -152,6 +152,25 @@ split.features.forEach((splitedPart, i) => {
 
 
 
+function loading(){
+    $(document).ready(function(){
+        var counter = 0;
+        var c = 0;
+        var i = setInterval(function(){
+            $(".loader .loading h1").html(c + "%");
+            $(".loader .loading hr").css("width", c + "%");
+            $(".loading-page .counter").css("background", "linear-gradient(to right, #f60d54 "+ c + "%,#0d0d0d "+ c + "%)");
+            $(".loading-page .counter h1.color").css("width", c + "%");
+            counter++;
+            c++;
+            if(counter == 101) {
+                clearInterval(i);
+            }
+        }, 50);
+    });
+}
+
+
 
 //==============================================================================================
 // asistensi 13 mei 2022 
@@ -190,3 +209,53 @@ class yang di pake
 11. route_explore
 12. close
 13. active
+
+
+
+// =================================================================================================
+asistensi 10 juni 2022
+1. menambahkan engine simulator
+2. bersihkan bug pada waypoint
+
+target 
+1. membuat obstacle yang bergerak
+
+
+
+
+
+
+// ==================== hasil pertemuan PKM
+1. Target utama kita memasukkan engine indicator
+2. targtet ke 2 yaitu membuat steering wherl drive
+3. membat tampilan bridge dan kemudian ada tampak luat kapal
+4. nanti diskenario harus ada pelengkap aksesoris seperti dashboard
+5. 
+
+
+// ================================================ analisis waypoint
+yang sudah aman
+1. TPK surabaya - IPC terminal peti Kemas
+2. TPK semarang - IPC terminal peti kemas
+3. TPK belawan - TPK perawang
+4. TPK - perawang - TPK belawan
+5. TPK Banjarmasin - TPK Kaltim kariangau
+6. 
+
+
+yang belum
+1. TPK makassar - kupang
+
+
+// asistensi 24 juni
+1. mengapa algoritma ini dibuat??
+untuk menerapkan otomasi khususnya untuk kapal kontainer, rute yang ada sekarang bersifat sebagai asisten. Rutnya berupa acuan saja. Sistem otonom memerlukan artificial intelligence untuk menemukan rute yang baru. Sistem ini sangat membantu untuk menerapkan sistem otomasi pelayarana di Indonesia.
+
+2. regulasi
+Jadi untuk rute pelayaran sudah dipastkan (fix). Namun, yang ada di aplikasi memiliki kemampuan adaptif atau penyesuain, untuk lebih jelasnya ditanyakan kepada pak Saut. 
+
+3. Untuk pengiriman data menggunakan satelite
+
+4. tampilan di aplikasi 
+-bahan bakar
+-rpm
